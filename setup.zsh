@@ -111,11 +111,11 @@ END
     echo "moonc_all" > "$LUNADOC_PATH/.continue_stage"
     $LUNADOC_PATH/.run moonc $LUNADOC_PATH || exit
     ;&
-#  doc)
-#    echo "doc" > "$LUNADOC_PATH/.continue_stage"
-#    cd $LUNADOC_PATH
-#    $LUNADOC_PATH/.run ldoc -d doc -f markdown -t lunadoc . || exit
-#    ;&
+  doc)
+    echo "doc" > "$LUNADOC_PATH/.continue_stage"
+    cd $LUNADOC_PATH
+    $LUNADOC_PATH/lunadoc || exit
+    ;&
 esac
 
 # cleanup
