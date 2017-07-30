@@ -24,8 +24,8 @@ mkdirp=(path)->
 
 for file in *project.files
   document = switch file\match '^.+%.(.+)$'
-    when 'moon' then assert compile assert(doc_moon assert(io.open project.iprefix .. file)\read'*a'), 'toc', 'extrafootnote', 'dlextra', 'fencedcode'
-    when 'md' then assert compile (assert(io.open project.iprefix .. file)\read'*a'), 'toc', 'extrafootnote', 'dlextra', 'fencedcode'
+    when 'moon' then assert compile(assert(doc_moon assert(io.open project.iprefix .. file)\read'*a'), 'toc', 'extrafootnote', 'dlextra', 'fencedcode')
+    when 'md' then assert compile(assert(io.open project.iprefix .. file)\read('*a'), 'toc', 'extrafootnote', 'dlextra', 'fencedcode')
   document.file = file
   document.project = project
   document.title or= file\gsub('%.[^%.]+$','')\gsub('/','.')
