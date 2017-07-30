@@ -21,15 +21,22 @@ dependencies = {
   "etlua",
   "loadkit",
   "luafilesystem",
-
-  -- Build dependency
-  "luarocks-addon-moonc"
 }
 
 build = {
   type = "command",
   build_command = "moonc .",
   modules = {
-    lunadoc = "modules/lunadoc/init.lua"
+    ["lunadoc"] = "modules/lunadoc/init.lua"
+  },
+
+  install = { 
+    bin = { "lunadoc" },
+    lua = { 
+      ["lunadoc"] = "modules/lunadoc/init.lua",
+      ["lunadoc.indent"] = "modules/lunadoc/indent.lua",
+      ["lunadoc.gsplit"] = "modules/lunadoc/gsplit.lua",
+      ["lunadoc.doc_moon"] = "modules/lunadoc/doc_moon.lua"
+    }
   }
 }
