@@ -7,8 +7,15 @@ A better documentation generator for Moonscript
 
 ## Usage
 
-Add a file `lunadoc.cfg` to your project:
+Comment your code like so:
 
+    --- First line of comment block
+    -- second line
+    -- ....
+    class Something
+
+
+Add a file `lunadoc.cfg` to your project:
 
     {
       title: 'The name of your project'
