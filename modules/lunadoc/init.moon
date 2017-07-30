@@ -1,10 +1,9 @@
 import register from require 'loadkit'
 import compile from require'discount'
 import mkdir from require'lfs'
+moonscript = require'moonscript.base'
 
 cfg=moonscript.loadfile 'lunadoc.cfg'
-
-moonscript = require'moonscript.base'
 
 doc_moon=require 'lunadoc.doc_moon'
 
