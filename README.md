@@ -7,7 +7,7 @@ A better documentation generator for Moonscript
 
 ### or
 
-`luarocks install lunadoc` (thanks to ❤ @spacekookie)
+`luarocks install lunadoc` (thanks to ❤ [spacekookie](https://github.com/spacekookie))
 
 ## Usage
 
