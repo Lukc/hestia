@@ -45,7 +45,7 @@ Add a file `lunadoc.cfg` to your project:
       }
       author: 'You' -- omit if you don't want a copyright notice in the docs
       date: 'when' -- omit if you don't want a copyright notice in the docs
-      tpl: require 'your.custom.template' -- to load a etlua template for the html, or just omit it to use our default
+      tpl: require 'your.custom.template' -- to load an etlua template for the html, or just omit it to use our default
     }
 
 then run `lunadoc`.
