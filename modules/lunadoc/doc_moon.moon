@@ -123,4 +123,4 @@ walkAST_extractMD=(ast,to='',head='#')->
   walkAST_addcomments code, ast
   --require'moon'.p ast
   --os.exit!
-  walkAST_extractMD(ast), 'toc', 'extrafootnote', 'dlextra', 'fencedcode'
+  walkAST_extractMD(ast)
