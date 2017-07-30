@@ -20,8 +20,8 @@ Note, to make a paragraph you have to include it as a properly prefixed `-- ` li
 
 Comment based Documentation is currently supported for:
 
-* `class`
-  - `extends`
+* `class ...`
+  - `extends ...`
   - `...: ...` properties
   - `...: (...)->` static methods
   - `...: (...)=>` dynamic methods
@@ -43,8 +43,8 @@ Add a file `lunadoc.cfg` to your project:
         'some_folder/some_file.moon'
         'some_file.md'
       }
-      author: 'You'
-      date: 'when'
+      author: 'You' -- omit if you don't want a copyright notice in the docs
+      date: 'when' -- omit if you don't want a copyright notice in the docs
     }
 
 then run `lunadoc`.
