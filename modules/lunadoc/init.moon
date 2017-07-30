@@ -30,7 +30,7 @@ mkdirp=(path)->
 
 for file in *project.files
   document = switch file\match '^.+%.(.+)$'
-    when 'moon' then assert compile(assert(html assert(io.open project.iprefix .. file)\read'*a'), unpack discountflags)
+    when 'moon' then assert compile(assert(doc_moon assert(io.open project.iprefix .. file)\read'*a'), unpack discountflags)
     when 'md' then assert compile(assert(io.open project.iprefix .. file)\read('*a'), unpack discountflags)
   document.file = file
   document.project = project
