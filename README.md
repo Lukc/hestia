@@ -7,7 +7,7 @@ A better documentation generator for Moonscript
 
 ## Usage
 
-Comment your code like so:
+Comment your code (in `.moon` files, obviously) like so:
 
     --- First line of comment block
     -- second line
@@ -18,6 +18,17 @@ Markdown is enabled while parsing those comments, and you can just use links to 
 
 Note, to make a paragraph you have to include it as a properly prefixed `-- ` line (that's "dash-dash-space"!).
 
+Comment based Documentation is currently supported for:
+
+* `class`
+  - `extends`
+  - `...: ...` properties
+  - `...: (...)->` static methods
+  - `...: (...)=>` dynamic methods
+* `...= (...)->` functions
+* `...= (...)=>` pseudo dynamic functions
+
+Also, `.md` files will be handled as plain markdown and converted to html.
 
 Add a file `lunadoc.cfg` to your project:
 
