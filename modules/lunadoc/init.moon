@@ -15,6 +15,9 @@ cfgloader=make_loader 'cfg', loadcfg, './?.lua'
 
 project=cfgloader 'lunadoc'
 
+project.iprefix or= ''
+project.oprefix or= ''
+
 tpl=project.tpl or require 'lunadoc.templates.html'
 
 discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}

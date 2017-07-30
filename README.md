@@ -35,7 +35,7 @@ The markdown parser is [discount](https://github.com/craigbarnes/lua-discount).
 Add a file `lunadoc.cfg` to your project:
 
     title: 'The name of your project'
-    iprefix: 'prefix/to/input/files/' -- set this to '' (empty string) if you don't want a prefix instead of omitting it (nil) or things will crash
+    iprefix: 'prefix/to/input/files/'
     oprefix: 'prefix/to/doc/files/'
     files: {
       'some_file.moon'
