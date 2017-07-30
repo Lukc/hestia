@@ -34,19 +34,17 @@ The markdown parser is [discount](https://github.com/craigbarnes/lua-discount) w
 
 Add a file `lunadoc.cfg` to your project:
 
-    {
-      title: 'The name of your project'
-      iprefix: 'prefix/to/input/files/' -- set this to '' (empty string) if you don't want a prefix instead of omitting it (nil) or things will crash
-      oprefix: 'prefix/to/doc/files/'
-      files: {
-        'some_file.moon'
-        'some_folder/some_file.moon'
-        'some_file.md'
-      }
-      author: 'You' -- omit if you don't want a copyright notice in the docs
-      date: 'when' -- omit if you don't want a copyright notice in the docs
-      tpl: require 'your.custom.template' -- to load an etlua template for the html, or just omit it to use our default
+    title: 'The name of your project'
+    iprefix: 'prefix/to/input/files/' -- set this to '' (empty string) if you don't want a prefix instead of omitting it (nil) or things will crash
+    oprefix: 'prefix/to/doc/files/'
+    files: {
+      'some_file.moon'
+      'some_folder/some_file.moon'
+      'some_file.md'
     }
+    author: 'You' -- omit if you don't want a copyright notice in the docs
+    date: 'when' -- omit if you don't want a copyright notice in the docs
+    tpl: require 'your.custom.template' -- to load an etlua template for the html, or just omit it to use our default
 
 then run `lunadoc`.
 

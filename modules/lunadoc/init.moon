@@ -1,16 +1,19 @@
-import register from require 'loadkit'
+import register,make_loader from require 'loadkit'
 import compile from require'discount'
 import mkdir from require'lfs'
 moonscript = require'moonscript.base'
+doc_moon=require 'lunadoc.doc_moon'
+indent=require'lunadoc.indent'
 
-register "elua", (file)->
+register 'elua', (file)->
   assert require'etlua'.compile file\read'*a'
 
-cfg=moonscript.loadfile 'lunadoc.cfg'
+loadcfg=(file)->
+  (assert moonscript.loadstring '{\n' .. indent(file\read'*a', '  ') .. '\n}')!
 
-doc_moon=require 'lunadoc.doc_moon'
+cfgloader=make_loader 'cfg', loadcfg, './?.lua'
 
-project=cfg!
+project=cfgloader 'lunadoc'
 
 tpl=project.tpl or require 'lunadoc.templates.html'
 

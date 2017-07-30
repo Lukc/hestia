@@ -1,5 +1,6 @@
 parse=require'moonscript.parse'
 import pos_to_line,trim,get_line from require 'moonscript.util'
+indent=require'lunadoc.indent'
 
 findPreCommentBegin=(code,line)->
   if line <=0
@@ -54,27 +55,6 @@ deref=(tbl,maystring)->
       (#args>0 and '('..table.concat(args,',')..')' or '')..(tbl[4]=='fat' and '=>' or '->')
     when 'self'
       '@'..tbl[2]
-
-gsplit=(sep, plain)=>
-    @=tostring @
-    start = 1
-    done = false
-    pass=(i, j, ...)->
-      if i
-        seg = @\sub(start, i - 1)
-        start = j + 1
-        return seg, ...
-      else
-        done = true
-        return @\sub(start)
-    return ->
-      return if done
-      if sep == ''
-        done = true
-        return @
-      return pass @\find sep, start, plain
-
-indent=(str,by)-> table.concat [by..line for line in gsplit str,'\n',true], '\n'
 
 walkAST_extractMD_props=(ast,head,methods)->
   to=''
