@@ -1,0 +1,4 @@
+#!/bin/zsh
+where="$(dirname "$(readlink -f "$0")")"
+
+exec $where/.run luajit -e 'require "lunadoc"'

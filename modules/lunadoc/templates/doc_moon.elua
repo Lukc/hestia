@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title><%= title %> - <%= project.title %></title>
+    <style type="text/css">
+      * { box-sizing: border-box; }
+      section{ margin-left: 15.5em; }
+      aside.sidebar{
+        border-right: 1px solid #888;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 15em;
+        margin: 0;
+        padding: 1em;
+        height: 100%;
+      }
+      aside.sidebar div.head{
+        font-weight: bold;
+      }
+      aside.sidebar ul{
+        list-style-type: none;
+        padding-left: .5em;
+      }
+      aside.index{
+        position: fixed;
+        right: 1em;
+        top: 2em;
+        width: 20em;
+        border: 1px solid #888;
+        background: #aaa;
+        padding: 1em;
+        display: inline-block;
+        border-radius: .2em;
+      }
+      aside.index div.head{
+        font-weight: bold;
+      }
+      aside.index ul{
+        list-style-type: none;
+        padding-left: .5em;
+      }
+      hr {
+        margin-right: 21.5em;
+        border: none;
+        border-top: 1px solid #888;
+      }
+      code {
+        white-space: pre;
+      }
+    </style>
+    <% if css then %>
+      <%- table.concat(css, '') %>
+    <% end %>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="head">
+        <%= project.title %>
+      </div>
+      <ul>
+        <%
+          for _, f in ipairs(project.files) do
+            ft = f:gsub('%.[^%.]+$',''):gsub('/', '.')
+            fl = f:gsub('%.[^%.]+$','.html')
+            local path=''
+            for _ in string.gmatch(file,'.+/') do
+              path=path..'../'
+            end
+        %>
+          <li>
+            <a href="<%- path..fl -%>"><%- ft -%></a>
+          </li>
+        <% end %>
+      </ul>
+    </aside>
+    <section class="header">
+      <h1><%= title %> - <%= project.title %></h1>
+      <% if date and author then %>
+        <span class="copy">&copy; <%= date %> <%= author %></span>
+      <% end %>
+    </section>
+    <% if index then %>
+      <aside class="index">
+        <div class="head">
+          <%= title %>
+        </div>
+        <%- index %>
+      </aside>
+    <% end %>
+    <section class="body">
+      <%- body %>
+    </section>
+  </body>
+</html>
