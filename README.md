@@ -14,6 +14,8 @@ Comment your code like so:
     -- ....
     class Something
 
+Markdown is enabled while parsing those comments, and you can just use links to anchors/other files to reference stuff.
+
 
 Add a file `lunadoc.cfg` to your project:
 
