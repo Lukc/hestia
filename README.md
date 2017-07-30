@@ -30,6 +30,8 @@ Comment based Documentation is currently supported for:
 
 Also, `.md` files will be handled as plain markdown and converted to html.
 
+The markdown parser is [discount](https://github.com/craigbarnes/lua-discount) with the flags `toc`, `extrafootnote`, `dlextra` and `fencedcode`.
+
 Add a file `lunadoc.cfg` to your project:
 
     {
