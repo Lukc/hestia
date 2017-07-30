@@ -1,4 +1,19 @@
-#!/bin/zsh
+#!/bin/bash
 where="$(dirname "$(readlink -f "$0")")"
 
-exec $where/.run luajit -e 'require "lunadoc"'
+lj=luajit
+
+if [[ -f $where/.run ]]; then
+  lj="$where/.run luajit"
+fi
+
+if [[ "_$1" == "_--help" ]]; then
+cat <<END
+Usage: lunadoc [path/to/project/folder]
+END
+exit
+elif [[ $# -eq 1 ]]; then
+  cd "$1"
+fi
+
+exec $lj -e 'require "lunadoc"'
