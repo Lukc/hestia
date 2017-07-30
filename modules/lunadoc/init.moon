@@ -3,18 +3,16 @@ import compile from require'discount'
 import mkdir from require'lfs'
 moonscript = require'moonscript.base'
 
+register "elua", (file)->
+  assert require'etlua'.compile file\read'*a'
+
 cfg=moonscript.loadfile 'lunadoc.cfg'
 
 doc_moon=require 'lunadoc.doc_moon'
 
-register "elua", (file)->
-  assert require'etlua'.compile file\read'*a'
-
-tpl={
-  html: require 'lunadoc.templates.html'
-}
-
 project=cfg!
+
+tpl=project.tpl or require 'lunadoc.templates.html'
 
 mkdirp=(path)->
   ppath=path\match '^(.+)/[^/]+'
@@ -34,5 +32,5 @@ for file in *project.files
   dir=(project.oprefix..file)\match '^(.+)/[^/]+'
   mkdirp dir if dir
   with assert io.open project.oprefix..file\gsub('%.[^%.]+$','.html'), 'w'
-    \write tpl.html document
+    \write tpl document
     \close!
