@@ -16,7 +16,7 @@ Comment your code like so:
 
 Markdown is enabled while parsing those comments, and you can just use links to anchors/other files to reference stuff.
 
-Note, to make a paragraph you have to include it as a properly prefixed `-- ` line (mind the trailing space!).
+Note, to make a paragraph you have to include it as a properly prefixed `-- ` line (that's "dash-dash-space"!).
 
 
 Add a file `lunadoc.cfg` to your project:
