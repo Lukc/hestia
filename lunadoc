@@ -16,4 +16,4 @@ elif [[ $# -eq 1 ]]; then
   cd "$1"
 fi
 
-exec $lj -e 'require "lunadoc"'
+exec $lj -lluarocks.loader -e 'require "lunadoc"'
