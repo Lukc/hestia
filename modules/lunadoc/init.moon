@@ -1,9 +1,12 @@
 import register from require 'loadkit'
 import compile from require'discount'
 import mkdir from require'lfs'
+
+cfg=moonscript.loadfile 'lunadoc.cfg'
+
 moonscript = require'moonscript.base'
 
-html=require 'lunadoc.html'
+doc_moon=require 'lunadoc.doc_moon'
 
 register "elua", (file)->
   assert require'etlua'.compile file\read'*a'
@@ -11,8 +14,6 @@ register "elua", (file)->
 tpl={
   html: require 'lunadoc.templates.html'
 }
-
-cfg=moonscript.loadfile 'lunadoc.cfg'
 
 project=cfg!
 
