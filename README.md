@@ -22,7 +22,7 @@ Comment based Documentation is currently supported for:
 
 * `class ...`
   - `extends ...`
-  - `...: ...` properties
+  - `...: ...` static properties
   - `...: (...)->` static methods
   - `...: (...)=>` dynamic methods
 * `...= (...)->` functions
