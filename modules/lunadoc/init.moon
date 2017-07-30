@@ -17,6 +17,8 @@ project=cfgloader 'lunadoc'
 
 tpl=project.tpl or require 'lunadoc.templates.html'
 
+discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
+
 mkdirp=(path)->
   ppath=path\match '^(.+)/[^/]+'
   if ppath
@@ -25,8 +27,8 @@ mkdirp=(path)->
 
 for file in *project.files
   document = switch file\match '^.+%.(.+)$'
-    when 'moon' then assert compile(assert(html assert(io.open project.iprefix .. file)\read'*a'), 'toc', 'extrafootnote', 'dlextra', 'fencedcode')
-    when 'md' then assert compile(assert(io.open project.iprefix .. file)\read('*a'), 'toc', 'extrafootnote', 'dlextra', 'fencedcode')
+    when 'moon' then assert compile(assert(html assert(io.open project.iprefix .. file)\read'*a'), unpack discountflags)
+    when 'md' then assert compile(assert(io.open project.iprefix .. file)\read('*a'), unpack discountflags)
   document.file = file
   document.project = project
   document.title or= file\gsub('%.[^%.]+$','')\gsub('/','.')

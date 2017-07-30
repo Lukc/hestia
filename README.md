@@ -30,7 +30,7 @@ Comment based Documentation is currently supported for:
 
 Also, `.md` files will be handled as plain markdown and converted to html.
 
-The markdown parser is [discount](https://github.com/craigbarnes/lua-discount) with the flags `toc`, `extrafootnote`, `dlextra` and `fencedcode`.
+The markdown parser is [discount](https://github.com/craigbarnes/lua-discount).
 
 Add a file `lunadoc.cfg` to your project:
 
@@ -45,6 +45,12 @@ Add a file `lunadoc.cfg` to your project:
     author: 'You' -- omit if you don't want a copyright notice in the docs
     date: 'when' -- omit if you don't want a copyright notice in the docs
     tpl: require 'your.custom.template' -- to load an etlua template for the html, or just omit it to use our default
+    discount: { -- flags for discount, omit to use the default flags shown here
+      'toc'
+      'extrafootnote'
+      'dlextra'
+      'fencedcode'
+    }
 
 then run `lunadoc`.
 
