@@ -2,7 +2,7 @@ package = "lunadoc"
 version = "0.1-1"
 
 source = {
-  url = "https://github.com/cuddlyrobot/lunadoc"
+  url = "git://github.com/cuddlyrobot/lunadoc.git"
 }
 
 description = {
