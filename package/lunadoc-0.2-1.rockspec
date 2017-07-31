@@ -41,7 +41,10 @@ build = {
       ["lunadoc.indent"] = "modules/lunadoc/indent.lua",
       ["lunadoc.gsplit"] = "modules/lunadoc/gsplit.lua",
       ["lunadoc.doc_moon"] = "modules/lunadoc/doc_moon.lua",
-      ["lunadoc.templates.html"] = "modules/lunadoc/templates/html.elua"
-    },
+      ["lunadoc.templates.hljs"] = "modules/lunadoc/templates/hljs.js",
+      ["lunadoc.templates.html"] = "modules/lunadoc/templates/html.elua",
+      ["lunadoc.templates.style"] = "modules/lunadoc/templates/style.css",
+      ["lunadoc.templates.monokai"] = "modules/lunadoc/templates/monokai.css"
+    }
   }
 }
