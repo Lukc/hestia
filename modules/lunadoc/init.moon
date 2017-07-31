@@ -37,13 +37,16 @@ cfgloader=make_loader 'cfg', loadcfg, './?.lua'
 
   for file in *project.files
     print 'reading file: %s'\format project.iprefix..file
+    handle,err=io.open project.iprefix .. file
+    return nil, err unless handle
     document = switch file\match '^.+%.(.+)$'
       when 'moon'
         print '  ...using lunadoc.doc_moon'
-        assert compile(assert(doc_moon assert(io.open project.iprefix .. file)\read'*a'), unpack discountflags)
+        assert compile(assert(doc_moon handle\read'*a'), unpack discountflags)
       when 'md'
         print '  ...using discount'
-        assert compile(assert(io.open project.iprefix .. file)\read('*a'), unpack discountflags)
+        assert compile(handle\read'*a', unpack discountflags)
+    handle\close!
     document.file = file
     document.project = project
     document.title or= file\gsub('%.[^%.]+$','')\gsub('/','.')
