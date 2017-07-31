@@ -16,4 +16,10 @@ elif [[ $# -eq 1 ]]; then
   cd "$1"
 fi
 
-exec $lj -lluarocks.loader -e 'require "lunadoc"'
+exec $lj -lluarocks.loader <<END
+status, message = pcall(require, 'lunadoc')
+if not status then
+  print('ERROR:', (tostring(message):gsub('^[^:]+:[0-9]+: ','')))
+  os.exit(1)
+end
+END
