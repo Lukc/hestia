@@ -54,7 +54,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
 
   project.tplcopy or= {
     find_css 'lunadoc.templates.style'
-    find_css 'lunadoc.templates.hljs-monokai'
+    find_css 'lunadoc.templates.monokai'
     find_js 'lunadoc.templates.hljs'
   }
 
