@@ -45,10 +45,10 @@ for file in *project.files
   document.title or= file\gsub('%.[^%.]+$','')\gsub('/','.')
   document.date or= project.date
   document.author or= project.author
-  dir=(project.oprefix..file)\match '^(.+)/[^/]+'
-  mkdirp dir if dir
   ofilepath=project.oprefix..file\gsub('%.[^%.]+$','.html')
   print 'writing file %s'\format ofilepath
+  dir=ofilepath\match '^(.+)/[^/]+'
+  mkdirp dir if dir
   with assert io.open ofilepath, 'w'
     \write tpl document
     \close!
