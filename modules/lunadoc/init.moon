@@ -6,49 +6,55 @@ doc_moon=require 'lunadoc.doc_moon'
 indent=require'lunadoc.indent'
 
 register 'elua', (file)->
-  assert require'etlua'.compile file\read'*a'
+  require'etlua'.compile file\read'*a'
 
 loadcfg=(file)->
-  (assert moonscript.loadstring('{\n' .. indent(file\read'*a', '  ') .. '\n}'))!
+  fn,err=moonscript.loadstring '{\n' .. indent(file\read'*a', '  ') .. '\n}'
+  return fn,nil,err unless fn
+  fn!,true
 
 cfgloader=make_loader 'cfg', loadcfg, './?.lua'
 
-project=cfgloader 'lunadoc'
+->
+  project,status,err=cfgloader 'lunadoc'
 
-error 'missing "lunadoc.cfg" file' unless project
+  return nil, 'missing "lunadoc.cfg" file' unless project
+  return nil, err unless status
 
-project.iprefix or= ''
-project.oprefix or= ''
+  project.iprefix or= ''
+  project.oprefix or= ''
 
-tpl=project.tpl or require 'lunadoc.templates.html'
+  tpl=project.tpl or require 'lunadoc.templates.html'
 
-discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
+  discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
 
-mkdirp=(path)->
-  ppath=path\match '^(.+)/[^/]+'
-  if ppath
-    mkdirp ppath
-  print '  ...creating folder: %s'\format path
-  mkdir path
+  mkdirp=(path)->
+    ppath=path\match '^(.+)/[^/]+'
+    if ppath
+      mkdirp ppath
+    print '  ...creating folder: %s'\format path
+    mkdir path
 
-for file in *project.files
-  print 'reading file: %s'\format project.iprefix..file
-  document = switch file\match '^.+%.(.+)$'
-    when 'moon'
-      print '  ...using lunadoc.doc_moon'
-      assert compile(assert(doc_moon assert(io.open project.iprefix .. file)\read'*a'), unpack discountflags)
-    when 'md'
-      print '  ...using discount'
-      assert compile(assert(io.open project.iprefix .. file)\read('*a'), unpack discountflags)
-  document.file = file
-  document.project = project
-  document.title or= file\gsub('%.[^%.]+$','')\gsub('/','.')
-  document.date or= project.date
-  document.author or= project.author
-  ofilepath=project.oprefix..file\gsub('%.[^%.]+$','.html')
-  print 'writing file %s'\format ofilepath
-  dir=ofilepath\match '^(.+)/[^/]+'
-  mkdirp dir if dir
-  with assert io.open ofilepath, 'w'
-    \write tpl document
-    \close!
+  for file in *project.files
+    print 'reading file: %s'\format project.iprefix..file
+    document = switch file\match '^.+%.(.+)$'
+      when 'moon'
+        print '  ...using lunadoc.doc_moon'
+        assert compile(assert(doc_moon assert(io.open project.iprefix .. file)\read'*a'), unpack discountflags)
+      when 'md'
+        print '  ...using discount'
+        assert compile(assert(io.open project.iprefix .. file)\read('*a'), unpack discountflags)
+    document.file = file
+    document.project = project
+    document.title or= file\gsub('%.[^%.]+$','')\gsub('/','.')
+    document.date or= project.date
+    document.author or= project.author
+    ofilepath=project.oprefix..file\gsub('%.[^%.]+$','.html')
+    print 'writing file %s'\format ofilepath
+    dir=ofilepath\match '^(.+)/[^/]+'
+    mkdirp dir if dir
+    handle,err=io.open ofilepath, 'w'
+    return nil, err unless handle
+    with handle
+      \write tpl document
+      \close!
