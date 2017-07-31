@@ -47,6 +47,9 @@ Add a file `lunadoc.cfg` to your project:
       'some_file.moon'
       'some_folder/some_file.moon'
       'some_file.md'
+      copy: { -- table of files to plainly copy, omit if unused
+        'some_file'
+      }
     }
     author: 'You' -- omit if you don't want a copyright notice in the docs
     date: 'when' -- omit if you don't want a copyright notice in the docs

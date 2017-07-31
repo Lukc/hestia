@@ -61,3 +61,16 @@ cfgloader=make_loader 'cfg', loadcfg, './?.lua'
     with handle
       \write tpl document
       \close!
+  if type(project.files.copy)=='table'
+    for file in *project.files.copy
+      ipath=project.iprefix .. file
+      opath=project.oprefix .. file
+      print 'copying: %s'\format file
+      print '  ...reading: %s'\format ipath
+      ihandle,err=io.open ipath, 'r'
+      return nil, err unless ihandle
+      print '  ...writing: %s'\format opath
+      ohandle,err=io.open opath, 'w'
+      return nil, err unless ohandle
+      ohandle\write ihandle\read'*a'
+  return true
