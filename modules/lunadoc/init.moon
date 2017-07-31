@@ -53,6 +53,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
   discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
 
   project.tplcopy or= {
+    find_css 'lunadoc.templates.style'
     find_css 'lunadoc.templates.hljs'
     find_js 'lunadoc.templates.hljs'
   }

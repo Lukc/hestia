@@ -10,61 +10,9 @@
     <meta charset="utf-8"/>
     <title><%= title %> - <%= project.title %></title>
     <link rel="stylesheet" href="<%- path -%>hljs.css" />
+    <link rel="stylesheet" href="<%- path -%>style.css" />
     <script type="text/javascript" src="<%- path -%>hljs.js"></script>
     <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
-    <style type="text/css">
-      * { box-sizing: border-box; }
-      section{
-        margin-left: 15.5em;
-        margin-right: 21.5em;
-      }
-      aside.sidebar{
-        border-right: 1px solid #888;
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 15em;
-        margin: 0;
-        padding: 1em;
-        height: 100%;
-      }
-      aside.sidebar div.head{
-        font-weight: bold;
-      }
-      aside.sidebar ul{
-        list-style-type: none;
-        padding-left: .5em;
-      }
-      aside.index{
-        position: fixed;
-        right: 1em;
-        top: 2em;
-        width: 20em;
-        border: 1px solid #888;
-        background: #aaa;
-        padding: 1em;
-        display: inline-block;
-        border-radius: .2em;
-      }
-      aside.index div.head{
-        font-weight: bold;
-      }
-      aside.index ul{
-        list-style-type: none;
-        padding-left: .5em;
-      }
-      hr {
-        border: none;
-        border-top: 1px solid #888;
-      }
-      code {
-        white-space: pre;
-        padding: 3px;
-        background: #ddd;
-        border-radius: 2px;
-        color: #000;
-      }
-    </style>
     <% if css then %>
       <%- table.concat(css, '') %>
     <% end %>
