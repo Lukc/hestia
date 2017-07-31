@@ -27,16 +27,19 @@ build = {
   type = "command",
   build_command = "moonc .",
   modules = {
-    ["lunadoc"] = "modules/lunadoc/init.lua"
+    ["lunadoc.init"] = "modules/lunadoc/init.lua",
+    ["lunadoc.indent"] = "modules/lunadoc/indent.lua",
+    ["lunadoc.gsplit"] = "modules/lunadoc/gsplit.lua",
+    ["lunadoc.doc_moon"] = "modules/lunadoc/doc_moon.lua"
   },
 
   install = { 
     bin = { "lunadoc" },
-    lua = { 
-      ["lunadoc"] = "modules/lunadoc/init.lua",
+    lua = {
+      ["lunadoc.init"] = "modules/lunadoc/init.lua",
       ["lunadoc.indent"] = "modules/lunadoc/indent.lua",
       ["lunadoc.gsplit"] = "modules/lunadoc/gsplit.lua",
       ["lunadoc.doc_moon"] = "modules/lunadoc/doc_moon.lua"
-    }
+    },
   }
 }
