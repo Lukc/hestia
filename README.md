@@ -17,10 +17,12 @@ A better documentation generator for Moonscript
 
 Comment your code (in `.moon` files, obviously) like so:
 
-    --- First line of comment block
-    -- second line
-    -- ....
-    class Something
+```moonscript
+--- First line of comment block
+-- second line
+-- ....
+class Something
+```
 
 Markdown is enabled while parsing those comments, and you can just use links to anchors/other files to reference stuff.
 
@@ -42,26 +44,28 @@ The markdown parser is [discount](https://github.com/craigbarnes/lua-discount).
 
 Add a file `lunadoc.cfg` to your project:
 
-    title: 'The name of your project'
-    iprefix: 'prefix/to/input/files/'
-    oprefix: 'prefix/to/doc/files/'
-    files: {
-      'some_file.moon'
-      'some_folder/some_file.moon'
-      'some_file.md'
-      copy: { -- table of files to plainly copy, omit if unused
-        'some_file'
-      }
-    }
-    author: 'You' -- omit if you don't want a copyright notice in the docs
-    date: 'when' -- omit if you don't want a copyright notice in the docs
-    tpl: require 'your.custom.template' -- to load an etlua template for the html, or just omit it to use our default
-    discount: { -- flags for discount, omit to use the default flags shown here
-      'toc'
-      'extrafootnote'
-      'dlextra'
-      'fencedcode'
-    }
+```moonscript
+title: 'The name of your project'
+iprefix: 'prefix/to/input/files/'
+oprefix: 'prefix/to/doc/files/'
+files: {
+  'some_file.moon'
+  'some_folder/some_file.moon'
+  'some_file.md'
+  copy: { -- table of files to plainly copy, omit if unused
+    'some_file'
+  }
+}
+author: 'You' -- omit if you don't want a copyright notice in the docs
+date: 'when' -- omit if you don't want a copyright notice in the docs
+tpl: require 'your.custom.template' -- to load an etlua template for the html, or just omit it to use our default
+discount: { -- flags for discount, omit to use the default flags shown here
+  'toc'
+  'extrafootnote'
+  'dlextra'
+  'fencedcode'
+}
+```
 
 then run `lunadoc`.
 
