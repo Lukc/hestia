@@ -2,18 +2,18 @@
 
 A better documentation generator for Moonscript
 
-## Installation
+# Installation
 
-### from git
+## from git
 
 * Run `./setup.zsh`.
 * add the project folder to your `PATH` or symlink `lunadoc` into it.
 
-### using luarocks
+## using luarocks
 
 `luarocks install lunadoc` (thanks to ❤[spacekookie](https://github.com/spacekookie))
 
-## Usage
+# Usage
 
 Comment your code (in `.moon` files, obviously) like so:
 
