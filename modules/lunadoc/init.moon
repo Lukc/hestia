@@ -8,12 +8,36 @@ indent=require'lunadoc.indent'
 register 'elua', (file)->
   require'etlua'.compile file\read'*a'
 
+export find_css,find_js
+find_css=make_loader 'css'
+find_js=make_loader 'js'
+
 loadcfg=(file)->
   fn,err=moonscript.loadstring '{\n' .. indent(file\read'*a', '  ') .. '\n}'
   return fn,nil,err unless fn
   fn!,true
 
 cfgloader=make_loader 'cfg', loadcfg, './?.lua'
+
+mkdirp=(path)->
+  ppath=path\match '^(.+)/[^/]+'
+  if ppath
+    mkdirp ppath
+  print '  ...creating folder: %s'\format path
+  mkdir path
+
+cpfile=(file, iprefix, oprefix, ofile)->
+  ofile or=file
+  ipath=iprefix .. file
+  opath=oprefix .. ofile
+  print 'copying: %s'\format file
+  print '  ...reading: %s'\format ipath
+  ihandle,err=io.open ipath, 'r'
+  return nil, err unless ihandle
+  print '  ...writing: %s'\format opath
+  ohandle,err=io.open opath, 'w'
+  return nil, err unless ohandle
+  ohandle\write ihandle\read'*a'
 
 ->
   project,status,err=cfgloader 'lunadoc'
@@ -28,12 +52,10 @@ cfgloader=make_loader 'cfg', loadcfg, './?.lua'
 
   discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
 
-  mkdirp=(path)->
-    ppath=path\match '^(.+)/[^/]+'
-    if ppath
-      mkdirp ppath
-    print '  ...creating folder: %s'\format path
-    mkdir path
+  project.tplcopy or= {
+    find_css 'lunadoc.templates.hljs'
+    find_js 'lunadoc.templates.hljs'
+  }
 
   for file in *project.files
     print 'reading file: %s'\format project.iprefix..file
@@ -63,14 +85,11 @@ cfgloader=make_loader 'cfg', loadcfg, './?.lua'
       \close!
   if type(project.files.copy)=='table'
     for file in *project.files.copy
-      ipath=project.iprefix .. file
-      opath=project.oprefix .. file
-      print 'copying: %s'\format file
-      print '  ...reading: %s'\format ipath
-      ihandle,err=io.open ipath, 'r'
-      return nil, err unless ihandle
-      print '  ...writing: %s'\format opath
-      ohandle,err=io.open opath, 'w'
-      return nil, err unless ohandle
-      ohandle\write ihandle\read'*a'
+      status,err=cpfile file, project.iprefix, project.oprefix
+      return nil, err unless status
+  if type(project.tplcopy)=='table'
+    for file in *project.tplcopy
+      ofile=file\gsub '^.+/', ''
+      status,err=cpfile file, '', project.oprefix, ofile
+      return nil, err unless status
   return true
