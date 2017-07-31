@@ -1,4 +1,4 @@
-![lunadoc logo](https://github.com/cuddlyrobot/lunadoc/raw/master/logo.png)
+![lunadoc logo](./logo.png)
 
 A better documentation generator for Moonscript
 
