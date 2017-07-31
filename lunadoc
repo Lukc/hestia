@@ -5,7 +5,7 @@ lj=lua5.1
 
 if [[ -f $where/.run ]]; then
   lj="$where/.run luajit"
-elif which luajit >/dev/null; then
+elif which luajit >/dev/null 2>&1; then
   lj=luajit
 fi
 
