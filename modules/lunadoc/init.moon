@@ -17,7 +17,7 @@ loadcfg=(file)->
   return fn,nil,err unless fn
   fn!,true
 
-cfgloader=make_loader 'cfg', loadcfg, './?.lua'
+cfgloader=make_loader 'cfg', loadcfg, './custom_?.lua;./?.lua'
 
 mkdirp=(path)->
   ppath=path\match '^(.+)/[^/]+'

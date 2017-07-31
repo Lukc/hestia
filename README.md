@@ -74,6 +74,8 @@ discount: { -- flags for discount, omit to use the default flags shown here
 
 then run `lunadoc`.
 
+to temporarily override your `lunadoc.cfg` just copy it to `custom_lunadoc.cfg`.
+
 ---
 
 [![forthebadge](http://forthebadge.com/images/badges/built-by-codebabes.svg)](http://forthebadge.com)
