@@ -52,10 +52,9 @@ cpfile=(file, iprefix, oprefix, ofile)->
 
   discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
 
-  project.hljsstyle or= 'monokai-sublime'
   project.tplcopy or= {
     find_css 'lunadoc.templates.style'
-    find_css 'lunadoc.templates.hlstyles.'..project.hljsstyle
+    find_css 'lunadoc.templates.hlstyles.'.. (project.hljsstyle or 'monokai-sublime')
     find_js 'lunadoc.templates.hljs'
   }
 

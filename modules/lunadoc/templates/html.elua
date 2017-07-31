@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8"/>
     <title><%= title %> - <%= project.title %></title>
-    <link rel="stylesheet" href="<%- path .. project.hljsstyle -%>.css" />
+    <link rel="stylesheet" href="<%- path .. (project.hljsstyle or 'monokai') -%>.css" />
     <link rel="stylesheet" href="<%- path -%>style.css" />
     <script type="text/javascript" src="<%- path -%>hljs.js"></script>
     <script type="text/javascript">hljs.initHighlightingOnLoad();</script>

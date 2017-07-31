@@ -59,6 +59,7 @@ files: {
 author: 'You' -- omit if you don't want a copyright notice in the docs
 date: 'when' -- omit if you don't want a copyright notice in the docs
 tpl: require 'your.custom.template' -- to load an etlua template for the html, or just omit it to use our default
+hljsstyle: 'monokai-sublime' -- specific to the default template: the style sheet to use for highlight.js
 tplcopy: { -- table of absolute paths to copy to the oprefix (without subdirectories), omit to use the defaults (syntax highlighting using highlight.js)
   find_css 'your.custom.css' -- helper that finds .css file in module paths
   find_js 'your.custom.js' -- helper that finds .js file in module paths
