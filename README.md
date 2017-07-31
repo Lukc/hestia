@@ -4,10 +4,12 @@ A better documentation generator for Moonscript
 
 ## Installation
 
+### from git
+
 * Run `./setup.zsh`.
 * add the project folder to your `PATH` or symlink `lunadoc` into it.
 
-### or
+### using luarocks
 
 `luarocks install lunadoc` (thanks to ❤[spacekookie](https://github.com/spacekookie))
 
