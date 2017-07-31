@@ -1,3 +1,5 @@
+![lunadoc logo](./logo.svg)
+
 A better documentation generator for Moonscript
 
 ## Installation
