@@ -39,7 +39,8 @@ build = {
       ["lunadoc.init"] = "modules/lunadoc/init.lua",
       ["lunadoc.indent"] = "modules/lunadoc/indent.lua",
       ["lunadoc.gsplit"] = "modules/lunadoc/gsplit.lua",
-      ["lunadoc.doc_moon"] = "modules/lunadoc/doc_moon.lua"
+      ["lunadoc.doc_moon"] = "modules/lunadoc/doc_moon.lua",
+      ["lunadoc.templates.html"] = "modules/lunadoc/templates/html.elua"
     },
   }
 }
