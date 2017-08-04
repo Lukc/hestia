@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <%
   local path=''
-  for _ in string.gmatch(file,'.+/') do
+  for _ in string.gmatch(file,'[^/]+/') do
     path=path..'../'
   end
 %>
