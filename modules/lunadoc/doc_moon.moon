@@ -60,7 +60,7 @@ walkAST_extractMD_props=(ast,head,methods)->
   to=''
   for k,v in pairs ast
     if type(v)=='table' and v[1]=='props'
-      if (v[2][2][1]=='fndef' and methods) or (v[2][2][1]!='fndef' and not methods)
+      if ((v[2][2][1]=='fndef' and methods) or (v[2][2][1]!='fndef' and not methods)) and v[2][2][-3]
         to ..= head..'# `'
         switch v[2][1][1]
           when 'key_literal'
