@@ -67,9 +67,8 @@ walkAST_extractMD_props=(ast,head,methods)->
             to ..= v[2][1][2] ..': '
         to ..= deref v[2][2]
         to ..= '`\n'
-        if v[2][2][-3]
-          to ..= indent v[2][2][-3], '  '
-          to ..= '\n'
+        to ..= indent v[2][2][-3], '  '
+        to ..= '\n\n'
   if to!=''
     return head..(methods and ' Methods\n' or ' Properties\n')..to..'\n'
   return to
