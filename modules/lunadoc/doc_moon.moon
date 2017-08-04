@@ -89,7 +89,7 @@ walkAST_extractMD=(ast,to='',head='#')->
         when 'assign'
           if v[3][1][1]=='fndef' and v[2][1][-3]
             to ..= '----\n'
-            to ..= head..' `'..deref(v[2][1])
+            to ..= head..' `'..deref(v[2][1])..'= '
             to ..= deref v[3][1]
             to ..= '`\n' .. v[2][1][-3] .. '\n\n'
         else
