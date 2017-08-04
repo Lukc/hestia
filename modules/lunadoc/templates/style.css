@@ -4,6 +4,7 @@ section{
   margin-right: 21.5em;
 }
 aside.sidebar{
+  overflow: auto;
   border-right: 1px solid #888;
   position: fixed;
   left: 0;
@@ -21,6 +22,7 @@ aside.sidebar ul{
   padding-left: .5em;
 }
 aside.index{
+  overflow: auto;
   position: fixed;
   right: 1em;
   top: 2em;
@@ -42,7 +44,7 @@ hr {
   border: none;
   border-top: 1px solid #888;
 }
-code {
+section code {
   white-space: pre;
   padding: 3px;
   background: #ddd;

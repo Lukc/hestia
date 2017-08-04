@@ -14,8 +14,8 @@ find_js=make_loader 'js'
 
 loadcfg=(file)->
   fn,err=moonscript.loadstring '{\n' .. indent(file\read'*a', '  ') .. '\n}'
-  return fn,nil,err unless fn
-  fn!,true
+  return false,err unless fn
+  fn!
 
 cfgloader=make_loader 'cfg', loadcfg, './custom_?.lua;./?.lua'
 
@@ -40,10 +40,10 @@ cpfile=(file, iprefix, oprefix, ofile)->
   ohandle\write ihandle\read'*a'
 
 ->
-  project,status,err=cfgloader 'lunadoc'
+  project,err=cfgloader 'lunadoc'
 
-  return nil, 'missing "lunadoc.cfg" file' unless project
-  return nil, err unless status
+  return nil, 'missing "lunadoc.cfg" file' if type(project)=='nil'
+  return nil, err if type(project)~='table'
 
   project.iprefix or= ''
   project.oprefix or= ''
@@ -72,7 +72,10 @@ cpfile=(file, iprefix, oprefix, ofile)->
     handle\close!
     document.file = file
     document.project = project
-    document.title or= file\gsub('%.[^%.]+$','')\gsub('/','.')
+    if not document.title
+      document.title = file\gsub('%.[^%.]+$','')\gsub('/','.')
+      if project.modulefilter
+        document.title = project.modulefilter document.title
     document.date or= project.date
     document.author or= project.author
     ofilepath=project.oprefix..file\gsub('%.[^%.]+$','.html')

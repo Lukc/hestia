@@ -9,7 +9,7 @@
   <head>
     <meta charset="utf-8"/>
     <title><%= title %> - <%= project.title %></title>
-    <link rel="stylesheet" href="<%- path .. (project.hljsstyle or 'monokai') -%>.css" />
+    <link rel="stylesheet" href="<%- path .. (project.hljsstyle or 'monokai-sublime') -%>.css" />
     <link rel="stylesheet" href="<%- path -%>style.css" />
     <script type="text/javascript" src="<%- path -%>hljs.js"></script>
     <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
@@ -26,6 +26,9 @@
         <%
           for _, f in ipairs(project.files) do
             ft = f:gsub('%.[^%.]+$',''):gsub('/', '.')
+            if project.modulefilter then
+              ft = project.modulefilter(ft)
+            end
             fl = f:gsub('%.[^%.]+$','.html')
         %>
           <li>

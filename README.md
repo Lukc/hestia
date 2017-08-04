@@ -64,6 +64,7 @@ tplcopy: { -- table of absolute paths to copy to the oprefix (without subdirecto
   find_css 'your.custom.css' -- helper that finds .css file in module paths
   find_js 'your.custom.js' -- helper that finds .js file in module paths
 }
+modulefilter: (str)-> str -- a filter function to use on module names, omit if not required
 discount: { -- flags for discount, omit to use the default flags shown here
   'toc'
   'extrafootnote'
