@@ -58,10 +58,24 @@ cpfile=(file, iprefix, oprefix, ofile)->
     find_js 'lunadoc.templates.hljs'
   }
 
-  for file in *project.files
+  files = [filename for filename in *project.files]
+
+  index = 1
+  while index < #files
+    file = files[index]
+    index += 1
+
+    isDirectory = file\match '/$'
+    if isDirectory
+      for nFile in lfs.dir file
+        print "Registering #{nFile}."
+        table.insert files, file ..  nFile
+      continue
+
     print 'reading file: %s'\format project.iprefix..file
     handle,err=io.open project.iprefix .. file
     return nil, err unless handle
+
     document = switch file\match '^.+%.(.+)$'
       when 'moon'
         print '  ...using lunadoc.doc_moon'
@@ -69,6 +83,9 @@ cpfile=(file, iprefix, oprefix, ofile)->
       when 'md'
         print '  ...using discount'
         assert compile(handle\read'*a', unpack discountflags)
+      else
+        print '  ...unrecognized file format'
+        continue
     handle\close!
     document.file = file
     document.project = project
