@@ -1,6 +1,6 @@
 import register,make_loader from require 'loadkit'
 import compile from require'discount'
-import mkdir from require'lfs'
+import mkdir,dir from require'lfs'
 moonscript = require'moonscript.base'
 doc_moon=require 'lunadoc.doc_moon'
 indent=require'lunadoc.indent'
@@ -65,7 +65,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
 
       isDirectory = file\match '/$'
       if isDirectory
-        for nFile in lfs.dir file
+        for nFile in dir file
           if nFile == "." or nFile == ".." or nFile\match(".$") == "/"
             continue
           print "Registering #{nFile}."
