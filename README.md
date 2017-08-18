@@ -6,6 +6,10 @@ A better documentation generator for Moonscript
 
 ## from git
 
+* Run `make LUA_VERSION=5.3 PREFIX=/usr install` or `make help`.
+
+Alternatively,
+
 * Run `./setup.zsh`.
 * add the project folder to your `PATH` or symlink `lunadoc` into it.
 
