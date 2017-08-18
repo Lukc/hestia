@@ -195,7 +195,7 @@ dist-gz: $(PACKAGE)-$(VERSION).tar.gz
 $(PACKAGE)-$(VERSION).tar.gz: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.gz[00m'
 	$(Q)tar czf $(PACKAGE)-$(VERSION).tar.gz \
-		$(PACKAGE)-$(VERSION)/lunadoc \
+		$(PACKAGE)-$(VERSION)/lunadoc.moon \
 		$(PACKAGE)-$(VERSION)/examples/example.template.moon \
 		$(PACKAGE)-$(VERSION)/modules/lunadoc/doc_moon.moon \
 		$(PACKAGE)-$(VERSION)/modules/lunadoc/document.moon \
@@ -220,7 +220,7 @@ dist-xz: $(PACKAGE)-$(VERSION).tar.xz
 $(PACKAGE)-$(VERSION).tar.xz: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.xz[00m'
 	$(Q)tar cJf $(PACKAGE)-$(VERSION).tar.xz \
-		$(PACKAGE)-$(VERSION)/lunadoc \
+		$(PACKAGE)-$(VERSION)/lunadoc.moon \
 		$(PACKAGE)-$(VERSION)/examples/example.template.moon \
 		$(PACKAGE)-$(VERSION)/modules/lunadoc/doc_moon.moon \
 		$(PACKAGE)-$(VERSION)/modules/lunadoc/document.moon \
@@ -245,7 +245,7 @@ dist-bz2: $(PACKAGE)-$(VERSION).tar.bz2
 $(PACKAGE)-$(VERSION).tar.bz2: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.bz2[00m'
 	$(Q)tar cjf $(PACKAGE)-$(VERSION).tar.bz2 \
-		$(PACKAGE)-$(VERSION)/lunadoc \
+		$(PACKAGE)-$(VERSION)/lunadoc.moon \
 		$(PACKAGE)-$(VERSION)/examples/example.template.moon \
 		$(PACKAGE)-$(VERSION)/modules/lunadoc/doc_moon.moon \
 		$(PACKAGE)-$(VERSION)/modules/lunadoc/document.moon \

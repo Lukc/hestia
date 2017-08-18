@@ -1,0 +1,28 @@
+#!/bin/bash
+where="$(dirname "$(readlink -f "$0")")"
+
+lj=lua5.1
+
+if [[ -f $where/.run ]]; then
+  lj="$where/.run luajit"
+elif which luajit >/dev/null 2>&1; then
+  lj=luajit
+fi
+
+if [[ "_$1" == "_--help" ]]; then
+cat <<END
+Usage: lunadoc [path/to/project/folder]
+END
+exit
+elif [[ $# -eq 1 ]]; then
+  cd "$1"
+fi
+
+exec $lj -lluarocks.loader <<END
+pcall(function() require('moonscript') end)
+status, message = require('lunadoc')()
+if not status then
+  print('ERROR:', message)
+  os.exit(1)
+end
+END

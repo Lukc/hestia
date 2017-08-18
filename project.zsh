@@ -23,7 +23,7 @@ for file in modules/**/*.moon; do
 done
 
 dist=(
-	lunadoc
+	lunadoc.moon
 	**/*.moon
 	# build.zsh
 	project.zsh Makefile

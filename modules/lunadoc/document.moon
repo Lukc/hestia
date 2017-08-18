@@ -1,11 +1,22 @@
 
+{:mkdir} = require "lfs"
 discount = require "discount"
+
+doc_moon = require "lunadoc.doc_moon"
 
 unpack = unpack or table.unpack
 
-local Document
+createDirectory = (path) ->
+  ppath = path\match '^(.+)/[^/]+'
 
-Document = class
+  if ppath
+    createDirectory ppath
+
+  print '  ... creating folder: %s'\format path
+
+  mkdir path
+
+class
 	new: (@project, @filename) =>
 		@file = @filename -- FIXME: LEGACY
 
@@ -21,8 +32,10 @@ Document = class
 		@date or= project.date
 		@author or= project.author
 
+		@outputFilePath = @project.oprefix .. @filename\gsub('%.[^%.]+$', @project.ext or '.html')
+
 	__tostring: =>
-		"<Document>"
+		"<Document, #{@filename}>"
 
 	importMoon: (project, filename, file) =>
 		markdown = doc_moon file\read "*all"
@@ -31,7 +44,7 @@ Document = class
 			return nil, "could not generate markdown from moon file"
 
 		-- FIXME: IMHO, we shouldn’t generate the document as a whole, but bit by bit.
-		data, reason = discount.compile(markdown, project.discountFlags)
+		data, reason = discount.compile(markdown, unpack(project.discountFlags))
 
 		unless data
 			return nil, "discount: " .. reason
@@ -54,10 +67,13 @@ Document = class
 		extension = filename\match "^.+%.(.+)$"
 		methodName = "import" .. extension\gsub("^.", (s) -> s\upper!)
 
-		self = Document project, filename
+		self = @@ project, filename
 
 		if @@[methodName]
-			file = io.open filename, "r"
+			file, reason = io.open filename, "r"
+			unless file
+				return nil, reason
+
 			_, reason = @@[methodName] self, project, filename, file
 			file\close!
 
@@ -68,5 +84,9 @@ Document = class
 		else
 			return nil, "unrecognized file"
 
-Document
+	createDirectories: =>
+		directory = @outputFilePath\match '^(.+)/[^/]+'
+
+		if directory
+			createDirectory directory
 
