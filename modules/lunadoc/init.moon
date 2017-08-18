@@ -95,7 +95,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
         document.title = project.modulefilter document.title
     document.date or= project.date
     document.author or= project.author
-    ofilepath=project.oprefix..file\gsub('%.[^%.]+$','.html')
+    ofilepath=project.oprefix..file\gsub('%.[^%.]+$', project.ext or '.html')
     print 'writing file %s'\format ofilepath
     dir=ofilepath\match '^(.+)/[^/]+'
     mkdirp dir if dir
