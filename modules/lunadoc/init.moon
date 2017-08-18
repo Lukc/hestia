@@ -6,16 +6,12 @@ moonscript = require 'moonscript.base'
 doc_moon = require 'lunadoc.doc_moon'
 indent = require 'lunadoc.indent'
 
-Configuration = require 'lunadoc.configuration'
+Project = require 'lunadoc.project'
 Document = require 'lunadoc.document'
 Template = require 'lunadoc.template'
 
 register 'elua', (file) ->
   require('etlua').compile file\read '*a'
-
-export find_css,find_js
-find_css = make_loader 'css'
-find_js = make_loader 'js'
 
 createDirectory = (path)->
   ppath = path\match '^(.+)/[^/]+'
@@ -24,60 +20,40 @@ createDirectory = (path)->
   print '  ...creating folder: %s'\format path
   mkdir path
 
-copyFile = (ipath, opath)->
+copyFile = (file, iprefix, oprefix, ofile) ->
+  ofile or= file
+  ipath = iprefix .. file
+  opath = oprefix .. ofile
+
   print 'copying: %s'\format ipath
   print '  ...reading: %s'\format ipath
+
   ihandle,err=io.open ipath, 'r'
-  return nil, err unless ihandle
+  unless ihandle
+    return nil, err
+
   print '  ...writing: %s'\format opath
+
   ohandle,err=io.open opath, 'w'
-  return nil, err unless ohandle
+  unless ohandle
+    return nil, err
+
   ohandle\write ihandle\read'*a'
 
 ->
-  project, err = Configuration.load!
+  project, reason = Project.fromConfiguration!
 
-  return nil, 'missing "lunadoc.cfg" file' if type(project)=='nil'
-  return nil, err if type(project)~='table'
-
-  project.iprefix or= ''
-  project.oprefix or= ''
+  unless project
+    return nil, reason
 
   template, reason = switch type(project.tpl)
     when "string"
       Template.fromFilePath project.tpl
     when "function"
-      Template.fromFunction project.tpl
-    when "nil"
-      Template require 'lunadoc.templates.html'
+      Template project.tpl
 
   unless template
     return nil, reason
-
-  project.discountFlags or= project.discount -- FIXME: LEGACY
-
-  project.tplcopy or= {
-    find_css 'lunadoc.templates.style'
-    find_css 'lunadoc.templates.hlstyles.'.. (project.hljsstyle or 'monokai-sublime')
-    find_js 'lunadoc.templates.hljs'
-  }
-
-  project.files = with files = [filename for filename in *project.files]
-    index = 1
-    while index < #files
-      file = files[index]
-
-      isDirectory = file\match '/$'
-      if isDirectory
-        for nFile in dir file
-          if nFile == "." or nFile == ".." or nFile\match(".$") == "/"
-            continue
-          print "Registering #{nFile}."
-          table.insert files, file ..  nFile
-
-        table.remove files, index
-
-      index += 1
 
   for file in *project.files
     print 'reading file: %s'\format project.iprefix..file
@@ -105,7 +81,7 @@ copyFile = (ipath, opath)->
 
   if type(project.files.copy) == 'table'
     for file in *project.files.copy
-      status, err = copyFile project.iprefix .. "/" .. file, project.oprefix .. "/" .. file
+      status, err = copyFile project.iprefix, project.oprefix
 
       unless status
         return nil, err
@@ -113,7 +89,7 @@ copyFile = (ipath, opath)->
   if type(project.tplcopy) == 'table'
     for file in *project.tplcopy
       ofile=file\gsub '^.+/', ''
-      status , err = copyFile file, project.oprefix .. "/" .. ofile
+      status , err = copyFile file, '', project.oprefix, ofile
 
       unless status
         return nil, err

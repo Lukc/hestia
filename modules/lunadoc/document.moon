@@ -3,8 +3,6 @@ discount = require "discount"
 
 unpack = unpack or table.unpack
 
-DEFAULT_DISCOUNT_FLAGS = {"toc", "extrafootnote", "dlextra", "fencedcode"}
-
 local Document
 
 Document = class
@@ -33,7 +31,7 @@ Document = class
 			return nil, "could not generate markdown from moon file"
 
 		-- FIXME: IMHO, we shouldn’t generate the document as a whole, but bit by bit.
-		data, reason = discount.compile(markdown, project.discountFlags or DEFAULT_DISCOUNT_FLAGS)
+		data, reason = discount.compile(markdown, project.discountFlags)
 
 		unless data
 			return nil, "discount: " .. reason
@@ -44,7 +42,7 @@ Document = class
 	importMd: (project, filename, file) =>
 		markdown = file\read "*all"
 
-		data, reason = discount.compile markdown, unpack(project.discountFlags or DEFAULT_DISCOUNT_FLAGS)
+		data, reason = discount.compile markdown, unpack(project.discountFlags)
 
 		unless data
 			return nil, "discount: " .. reason
