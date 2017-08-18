@@ -88,6 +88,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
         continue
     handle\close!
     document.file = file
+    document.root = file\gsub("[^/][^/]+/", "../")\gsub("[^/]*$", "")\gsub("^$", ".")
     document.project = project
     if not document.title
       document.title = file\gsub('%.[^%.]+$','')\gsub('/','.')
