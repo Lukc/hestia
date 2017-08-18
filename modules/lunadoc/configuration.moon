@@ -25,7 +25,7 @@ Configuration = class
 				switch key
 					-- FIXME: Not complete.
 					-- FIXME: Ugly names (we could keep legacy compat, though).
-					when "files", "iprefix", "oprefix", "title", "date", "author"
+					when "files", "iprefix", "oprefix", "title", "date", "author", "ext", "tpl"
 						config[key] = value
 					else
 						print "warning: unrecognized key in configuration file: #{key}"

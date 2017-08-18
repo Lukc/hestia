@@ -8,6 +8,7 @@ indent = require 'lunadoc.indent'
 
 Configuration = require 'lunadoc.configuration'
 Document = require 'lunadoc.document'
+Template = require 'lunadoc.template'
 
 register 'elua', (file) ->
   require('etlua').compile file\read '*a'
@@ -24,7 +25,7 @@ createDirectory = (path)->
   mkdir path
 
 copyFile = (ipath, opath)->
-  print 'copying: %s'\format file
+  print 'copying: %s'\format ipath
   print '  ...reading: %s'\format ipath
   ihandle,err=io.open ipath, 'r'
   return nil, err unless ihandle
@@ -32,7 +33,6 @@ copyFile = (ipath, opath)->
   ohandle,err=io.open opath, 'w'
   return nil, err unless ohandle
   ohandle\write ihandle\read'*a'
-
 
 ->
   project, err = Configuration.load!
@@ -43,27 +43,16 @@ copyFile = (ipath, opath)->
   project.iprefix or= ''
   project.oprefix or= ''
 
-  tpl = project.tpl or require 'lunadoc.templates.html'
+  template, reason = switch type(project.tpl)
+    when "string"
+      Template.fromFilePath project.tpl
+    when "function"
+      Template.fromFunction project.tpl
+    when "nil"
+      Template require 'lunadoc.templates.html'
 
-  if type(tpl) == "string" and tpl\match "%.moon$"
-    tplFile = tpl
-    actualTemplate = moonscript.loadfile(tplFile)
-
-    unless actualTemplate
-      return nil, "missing template \"#{tplFile}\""
-
-    tpl = (document) ->
-      {:render_html} = require('lunadoc.lapis.html')
-      with env = {}
-        .document = document
-        .project = project
-
-        for k,v in pairs _G
-          [k] = v
-
-        setfenv actualTemplate, env
-
-      render_html actualTemplate
+  unless template
+    return nil, reason
 
   project.discountFlags or= project.discount -- FIXME: LEGACY
 
@@ -111,7 +100,7 @@ copyFile = (ipath, opath)->
       unless file
         return nil, reason
 
-      \write tpl document
+      \write template\render document
       \close!
 
   if type(project.files.copy) == 'table'
