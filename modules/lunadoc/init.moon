@@ -1,36 +1,29 @@
-import register,make_loader from require 'loadkit'
-import compile from require'discount'
-import mkdir,dir from require'lfs'
-import setfenv from require'moonscript.util'
-moonscript = require'moonscript.base'
-doc_moon=require 'lunadoc.doc_moon'
-indent=require'lunadoc.indent'
+{:register, :make_loader} = require 'loadkit'
+{:mkdir, :dir} = require 'lfs'
+{:setfenv} = require'moonscript.util'
 
-register 'elua', (file)->
-  require'etlua'.compile file\read'*a'
+moonscript = require 'moonscript.base'
+doc_moon = require 'lunadoc.doc_moon'
+indent = require 'lunadoc.indent'
+
+Configuration = require 'lunadoc.configuration'
+Document = require 'lunadoc.document'
+
+register 'elua', (file) ->
+  require('etlua').compile file\read '*a'
 
 export find_css,find_js
-find_css=make_loader 'css'
-find_js=make_loader 'js'
+find_css = make_loader 'css'
+find_js = make_loader 'js'
 
-loadcfg=(file)->
-  fn,err=moonscript.loadstring '{\n' .. indent(file\read'*a', '  ') .. '\n}'
-  return false,err unless fn
-  fn!
-
-cfgloader=make_loader 'cfg', loadcfg, './custom_?.lua;./?.lua'
-
-mkdirp=(path)->
-  ppath=path\match '^(.+)/[^/]+'
+createDirectory = (path)->
+  ppath = path\match '^(.+)/[^/]+'
   if ppath
-    mkdirp ppath
+    createDirectory ppath
   print '  ...creating folder: %s'\format path
   mkdir path
 
-cpfile=(file, iprefix, oprefix, ofile)->
-  ofile or=file
-  ipath=iprefix .. file
-  opath=oprefix .. ofile
+copyFile = (ipath, opath)->
   print 'copying: %s'\format file
   print '  ...reading: %s'\format ipath
   ihandle,err=io.open ipath, 'r'
@@ -40,8 +33,9 @@ cpfile=(file, iprefix, oprefix, ofile)->
   return nil, err unless ohandle
   ohandle\write ihandle\read'*a'
 
+
 ->
-  project,err=cfgloader 'lunadoc'
+  project, err = Configuration.load!
 
   return nil, 'missing "lunadoc.cfg" file' if type(project)=='nil'
   return nil, err if type(project)~='table'
@@ -54,6 +48,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
   if type(tpl) == "string" and tpl\match "%.moon$"
     tplFile = tpl
     actualTemplate = moonscript.loadfile(tplFile)
+
     unless actualTemplate
       return nil, "missing template \"#{tplFile}\""
 
@@ -70,7 +65,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
 
       render_html actualTemplate
 
-  discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
+  project.discountFlags or= project.discount -- FIXME: LEGACY
 
   project.tplcopy or= {
     find_css 'lunadoc.templates.style'
@@ -97,45 +92,41 @@ cpfile=(file, iprefix, oprefix, ofile)->
 
   for file in *project.files
     print 'reading file: %s'\format project.iprefix..file
-    handle,err=io.open project.iprefix .. file
-    return nil, err unless handle
 
-    document = switch file\match '^.+%.(.+)$'
-      when 'moon'
-        print '  ...using lunadoc.doc_moon'
-        assert compile(assert(doc_moon handle\read'*a'), unpack discountflags)
-      when 'md'
-        print '  ...using discount'
-        assert compile(handle\read'*a', unpack discountflags)
-      else
-        print '  ...unrecognized file format'
-        continue
-    handle\close!
-    document.file = file
-    document.root = file\gsub("[^/][^/]+/", "../")\gsub("[^/]*$", "")\gsub("^([^/]*)$", (m) -> m..".")\gsub("/*$", "")
-    document.project = project
-    if not document.title
-      document.title = file\gsub('%.[^%.]+$','')\gsub('/','.')
-      if project.modulefilter
-        document.title = project.modulefilter document.title
-    document.date or= project.date
-    document.author or= project.author
-    ofilepath=project.oprefix..file\gsub('%.[^%.]+$', project.ext or '.html')
-    print 'writing file %s'\format ofilepath
-    dir=ofilepath\match '^(.+)/[^/]+'
-    mkdirp dir if dir
-    handle,err=io.open ofilepath, 'w'
-    return nil, err unless handle
-    with handle
+    document, reason = Document.fromFileName project, file
+
+    unless document
+      io.stderr\write "warning: #{reason}\n"
+      continue
+
+    outputFilePath = project.oprefix..file\gsub('%.[^%.]+$', project.ext or '.html')
+
+    print 'writing file %s'\format outputFilePath
+
+    directory = outputFilePath\match '^(.+)/[^/]+'
+    if directory
+      createDirectory directory
+
+    with file, reason = io.open outputFilePath, 'w'
+      unless file
+        return nil, reason
+
       \write tpl document
       \close!
-  if type(project.files.copy)=='table'
+
+  if type(project.files.copy) == 'table'
     for file in *project.files.copy
-      status,err=cpfile file, project.iprefix, project.oprefix
-      return nil, err unless status
-  if type(project.tplcopy)=='table'
+      status, err = copyFile project.iprefix .. "/" .. file, project.oprefix .. "/" .. file
+
+      unless status
+        return nil, err
+
+  if type(project.tplcopy) == 'table'
     for file in *project.tplcopy
       ofile=file\gsub '^.+/', ''
-      status,err=cpfile file, '', project.oprefix, ofile
-      return nil, err unless status
+      status , err = copyFile file, project.oprefix .. "/" .. ofile
+
+      unless status
+        return nil, err
+
   return true
