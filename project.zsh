@@ -9,6 +9,7 @@ variables=(
 
 targets=(lunadoc)
 type[lunadoc]="script"
+sources[lunadoc]=""
 
 for file in modules/**/*.moon; do
 	if [[ "$file" =~ ^examples/.* ]]; then
