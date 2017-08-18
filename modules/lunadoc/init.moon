@@ -58,20 +58,24 @@ cpfile=(file, iprefix, oprefix, ofile)->
     find_js 'lunadoc.templates.hljs'
   }
 
-  files = [filename for filename in *project.files]
+  project.files = with files = [filename for filename in *project.files]
+    index = 1
+    while index < #files
+      file = files[index]
 
-  index = 1
-  while index < #files
-    file = files[index]
-    index += 1
+      isDirectory = file\match '/$'
+      if isDirectory
+        for nFile in lfs.dir file
+          if nFile == "." or nFile == ".." or nFile\match(".$") == "/"
+            continue
+          print "Registering #{nFile}."
+          table.insert files, file ..  nFile
 
-    isDirectory = file\match '/$'
-    if isDirectory
-      for nFile in lfs.dir file
-        print "Registering #{nFile}."
-        table.insert files, file ..  nFile
-      continue
+        table.remove files, index
 
+      index += 1
+
+  for file in *project.files
     print 'reading file: %s'\format project.iprefix..file
     handle,err=io.open project.iprefix .. file
     return nil, err unless handle
