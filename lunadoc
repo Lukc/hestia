@@ -19,6 +19,7 @@ elif [[ $# -eq 1 ]]; then
 fi
 
 exec $lj -lluarocks.loader <<END
+pcall(function() require('moonscript') end)
 status, message = require('lunadoc')()
 if not status then
   print('ERROR:', message)
