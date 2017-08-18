@@ -1,6 +1,7 @@
 import register,make_loader from require 'loadkit'
 import compile from require'discount'
 import mkdir,dir from require'lfs'
+import setfenv from require'moonscript.util'
 moonscript = require'moonscript.base'
 doc_moon=require 'lunadoc.doc_moon'
 indent=require'lunadoc.indent'
@@ -48,7 +49,26 @@ cpfile=(file, iprefix, oprefix, ofile)->
   project.iprefix or= ''
   project.oprefix or= ''
 
-  tpl=project.tpl or require 'lunadoc.templates.html'
+  tpl = project.tpl or require 'lunadoc.templates.html'
+
+  if type(tpl) == "string" and tpl\match "%.moon$"
+    tplFile = tpl
+    actualTemplate = moonscript.loadfile(tplFile)
+    unless actualTemplate
+      return nil, "missing template \"#{tplFile}\""
+
+    tpl = (document) ->
+      {:render_html} = require('lunadoc.lapis.html')
+      with env = {}
+        .document = document
+        .project = project
+
+        for k,v in pairs _G
+          [k] = v
+
+        setfenv actualTemplate, env
+
+      render_html actualTemplate
 
   discountflags=project.discount or {'toc', 'extrafootnote', 'dlextra', 'fencedcode'}
 
@@ -92,7 +112,7 @@ cpfile=(file, iprefix, oprefix, ofile)->
         continue
     handle\close!
     document.file = file
-    document.root = file\gsub("[^/][^/]+/", "../")\gsub("[^/]*$", "")\gsub("^$", ".")
+    document.root = file\gsub("[^/][^/]+/", "../")\gsub("[^/]*$", "")\gsub("^([^/]*)$", (m) -> m..".")\gsub("/*$", "")
     document.project = project
     if not document.title
       document.title = file\gsub('%.[^%.]+$','')\gsub('/','.')
