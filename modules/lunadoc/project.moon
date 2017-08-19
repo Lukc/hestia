@@ -1,6 +1,7 @@
 
 {:make_loader} = require "loadkit"
 {:setfenv} = require "moonscript.util"
+{:dir} = require "lfs"
 
 moonscript = require "moonscript"
 
