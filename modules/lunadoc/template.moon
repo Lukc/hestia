@@ -1,8 +1,6 @@
 
 moonscript = require "moonscript.base"
 
-{:make_loader} = require "loadkit"
-
 class
 	new: (renderer) =>
 		-- Forcing it to ignore self.
