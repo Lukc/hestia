@@ -67,7 +67,7 @@ class
 		etluaLoader = make_loader "elua", (file) ->
 			require("etlua").compile file\read "*all"
 
-		@tpl or= etluaLoader "lunadoc.templates.html"
+		@tpl or= etluaLoader "lunadoc.templates.default"
 
 		@discountFlags or= {
 			"toc", "extrafootnote", "dlextra", "fencedcode"
