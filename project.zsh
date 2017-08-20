@@ -1,5 +1,5 @@
 
-package=(lunadoc)
+package=(lunradoc)
 version="0.5.0"
 
 variables=(
@@ -7,11 +7,11 @@ variables=(
 	LUA_SHAREDIR '$(SHAREDIR)/lua/$(LUA_VERSION)'
 )
 
-targets=(lunadoc)
-type[lunadoc]="script"
-sources[lunadoc]=""
+targets=(lunradoc.moon)
+type[lunradoc.moon]="script"
+filename[lunradoc.moon]="lunradoc"
 
-for file in modules/**/*.moon; do
+for file in lunradoc/**/*.moon; do
 	if [[ "$file" =~ ^examples/.* ]]; then
 		continue
 	fi
@@ -23,14 +23,12 @@ for file in modules/**/*.moon; do
 done
 
 dist=(
-	lunadoc.moon
+	lunradoc.moon
 	**/*.moon
 	# build.zsh
 	project.zsh Makefile
 	# Documentation
-	lunadoc.cfg
+	lunradoc.cfg
 	**/*.md
-	# Luarocks
-	package/*.rockspec
 )
 

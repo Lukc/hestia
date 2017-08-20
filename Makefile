@@ -1,4 +1,4 @@
-PACKAGE = 'lunadoc'
+PACKAGE = 'lunradoc'
 VERSION = '0.5.0'
 
 PREFIX := /usr/local
@@ -17,138 +17,151 @@ LDFLAGS :=
 
 Q := @
 
-all: lunadoc modules/lunadoc/doc_moon.moon modules/lunadoc/document.moon modules/lunadoc/gsplit.moon modules/lunadoc/indent.moon modules/lunadoc/init.moon modules/lunadoc/lapis/html.moon modules/lunadoc/lapis/util/functions.moon modules/lunadoc/project.moon modules/lunadoc/template.moon
+all: lunradoc.moon lunradoc/doctree.moon lunradoc/document.moon lunradoc/gsplit.moon lunradoc/indent.moon lunradoc/init.moon lunradoc/lapis/html.moon lunradoc/lapis/util/functions.moon lunradoc/project.moon lunradoc/template.moon lunradoc/templates/bulma.moon
 	@:
 
-lunadoc:
+lunradoc.moon:
 
-lunadoc.install: lunadoc
-	@echo '[01;31m  IN >    [01;37m$(BINDIR)/lunadoc[00m'
+lunradoc.moon.install: lunradoc.moon
+	@echo '[01;31m  IN >    [01;37m$(BINDIR)/lunradoc[00m'
 	$(Q)mkdir -p '$(DESTDIR)$(BINDIR)'
-	$(Q)install -m0755 lunadoc $(DESTDIR)$(BINDIR)/lunadoc
+	$(Q)install -m0755 lunradoc.moon $(DESTDIR)$(BINDIR)/lunradoc
 
-lunadoc.clean:
+lunradoc.moon.clean:
 
-lunadoc.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(BINDIR)/lunadoc[00m'
-	$(Q)rm -f '$(DESTDIR)$(BINDIR)/lunadoc'
+lunradoc.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(BINDIR)/lunradoc[00m'
+	$(Q)rm -f '$(DESTDIR)$(BINDIR)/lunradoc'
 
-modules/lunadoc/doc_moon.moon:
+lunradoc/doctree.moon:
 
-modules/lunadoc/doc_moon.moon.install: modules/lunadoc/doc_moon.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/doc_moon.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc'
-	$(Q)install -m0755 modules/lunadoc/doc_moon.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/doc_moon.moon
+lunradoc/doctree.moon.install: lunradoc/doctree.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/doctree.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
+	$(Q)install -m0755 lunradoc/doctree.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/doctree.moon
 
-modules/lunadoc/doc_moon.moon.clean:
+lunradoc/doctree.moon.clean:
 
-modules/lunadoc/doc_moon.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/doc_moon.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/doc_moon.moon'
+lunradoc/doctree.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/doctree.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/doctree.moon'
 
-modules/lunadoc/document.moon:
+lunradoc/document.moon:
 
-modules/lunadoc/document.moon.install: modules/lunadoc/document.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/document.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc'
-	$(Q)install -m0755 modules/lunadoc/document.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/document.moon
+lunradoc/document.moon.install: lunradoc/document.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/document.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
+	$(Q)install -m0755 lunradoc/document.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/document.moon
 
-modules/lunadoc/document.moon.clean:
+lunradoc/document.moon.clean:
 
-modules/lunadoc/document.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/document.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/document.moon'
+lunradoc/document.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/document.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/document.moon'
 
-modules/lunadoc/gsplit.moon:
+lunradoc/gsplit.moon:
 
-modules/lunadoc/gsplit.moon.install: modules/lunadoc/gsplit.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/gsplit.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc'
-	$(Q)install -m0755 modules/lunadoc/gsplit.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/gsplit.moon
+lunradoc/gsplit.moon.install: lunradoc/gsplit.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/gsplit.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
+	$(Q)install -m0755 lunradoc/gsplit.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/gsplit.moon
 
-modules/lunadoc/gsplit.moon.clean:
+lunradoc/gsplit.moon.clean:
 
-modules/lunadoc/gsplit.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/gsplit.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/gsplit.moon'
+lunradoc/gsplit.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/gsplit.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/gsplit.moon'
 
-modules/lunadoc/indent.moon:
+lunradoc/indent.moon:
 
-modules/lunadoc/indent.moon.install: modules/lunadoc/indent.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/indent.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc'
-	$(Q)install -m0755 modules/lunadoc/indent.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/indent.moon
+lunradoc/indent.moon.install: lunradoc/indent.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/indent.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
+	$(Q)install -m0755 lunradoc/indent.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/indent.moon
 
-modules/lunadoc/indent.moon.clean:
+lunradoc/indent.moon.clean:
 
-modules/lunadoc/indent.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/indent.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/indent.moon'
+lunradoc/indent.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/indent.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/indent.moon'
 
-modules/lunadoc/init.moon:
+lunradoc/init.moon:
 
-modules/lunadoc/init.moon.install: modules/lunadoc/init.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/init.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc'
-	$(Q)install -m0755 modules/lunadoc/init.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/init.moon
+lunradoc/init.moon.install: lunradoc/init.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/init.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
+	$(Q)install -m0755 lunradoc/init.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/init.moon
 
-modules/lunadoc/init.moon.clean:
+lunradoc/init.moon.clean:
 
-modules/lunadoc/init.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/init.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/init.moon'
+lunradoc/init.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/init.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/init.moon'
 
-modules/lunadoc/lapis/html.moon:
+lunradoc/lapis/html.moon:
 
-modules/lunadoc/lapis/html.moon.install: modules/lunadoc/lapis/html.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/lapis/html.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/lapis'
-	$(Q)install -m0755 modules/lunadoc/lapis/html.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/lapis/html.moon
+lunradoc/lapis/html.moon.install: lunradoc/lapis/html.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/html.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis'
+	$(Q)install -m0755 lunradoc/lapis/html.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/html.moon
 
-modules/lunadoc/lapis/html.moon.clean:
+lunradoc/lapis/html.moon.clean:
 
-modules/lunadoc/lapis/html.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/lapis/html.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/lapis/html.moon'
+lunradoc/lapis/html.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/html.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/html.moon'
 
-modules/lunadoc/lapis/util/functions.moon:
+lunradoc/lapis/util/functions.moon:
 
-modules/lunadoc/lapis/util/functions.moon.install: modules/lunadoc/lapis/util/functions.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/lapis/util/functions.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/lapis/util'
-	$(Q)install -m0755 modules/lunadoc/lapis/util/functions.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/lapis/util/functions.moon
+lunradoc/lapis/util/functions.moon.install: lunradoc/lapis/util/functions.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/util'
+	$(Q)install -m0755 lunradoc/lapis/util/functions.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon
 
-modules/lunadoc/lapis/util/functions.moon.clean:
+lunradoc/lapis/util/functions.moon.clean:
 
-modules/lunadoc/lapis/util/functions.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/lapis/util/functions.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/lapis/util/functions.moon'
+lunradoc/lapis/util/functions.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon'
 
-modules/lunadoc/project.moon:
+lunradoc/project.moon:
 
-modules/lunadoc/project.moon.install: modules/lunadoc/project.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/project.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc'
-	$(Q)install -m0755 modules/lunadoc/project.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/project.moon
+lunradoc/project.moon.install: lunradoc/project.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/project.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
+	$(Q)install -m0755 lunradoc/project.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/project.moon
 
-modules/lunadoc/project.moon.clean:
+lunradoc/project.moon.clean:
 
-modules/lunadoc/project.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/project.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/project.moon'
+lunradoc/project.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/project.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/project.moon'
 
-modules/lunadoc/template.moon:
+lunradoc/template.moon:
 
-modules/lunadoc/template.moon.install: modules/lunadoc/template.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunadoc/template.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc'
-	$(Q)install -m0755 modules/lunadoc/template.moon $(DESTDIR)$(LUA_SHAREDIR)/lunadoc/template.moon
+lunradoc/template.moon.install: lunradoc/template.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/template.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
+	$(Q)install -m0755 lunradoc/template.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/template.moon
 
-modules/lunadoc/template.moon.clean:
+lunradoc/template.moon.clean:
 
-modules/lunadoc/template.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunadoc/template.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunadoc/template.moon'
+lunradoc/template.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/template.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/template.moon'
+
+lunradoc/templates/bulma.moon:
+
+lunradoc/templates/bulma.moon.install: lunradoc/templates/bulma.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/templates'
+	$(Q)install -m0755 lunradoc/templates/bulma.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon
+
+lunradoc/templates/bulma.moon.clean:
+
+lunradoc/templates/bulma.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon'
 
 $(DESTDIR)$(PREFIX):
 	@echo '[01;35m  DIR >   [01;37m$(PREFIX)[00m'
@@ -165,12 +178,12 @@ $(DESTDIR)$(SHAREDIR):
 $(DESTDIR)$(INCLUDEDIR):
 	@echo '[01;35m  DIR >   [01;37m$(INCLUDEDIR)[00m'
 	$(Q)mkdir -p $(DESTDIR)$(INCLUDEDIR)
-install: subdirs.install lunadoc.install modules/lunadoc/doc_moon.moon.install modules/lunadoc/document.moon.install modules/lunadoc/gsplit.moon.install modules/lunadoc/indent.moon.install modules/lunadoc/init.moon.install modules/lunadoc/lapis/html.moon.install modules/lunadoc/lapis/util/functions.moon.install modules/lunadoc/project.moon.install modules/lunadoc/template.moon.install
+install: subdirs.install lunradoc.moon.install lunradoc/doctree.moon.install lunradoc/document.moon.install lunradoc/gsplit.moon.install lunradoc/indent.moon.install lunradoc/init.moon.install lunradoc/lapis/html.moon.install lunradoc/lapis/util/functions.moon.install lunradoc/project.moon.install lunradoc/template.moon.install lunradoc/templates/bulma.moon.install
 	@:
 
 subdirs.install:
 
-uninstall: subdirs.uninstall lunadoc.uninstall modules/lunadoc/doc_moon.moon.uninstall modules/lunadoc/document.moon.uninstall modules/lunadoc/gsplit.moon.uninstall modules/lunadoc/indent.moon.uninstall modules/lunadoc/init.moon.uninstall modules/lunadoc/lapis/html.moon.uninstall modules/lunadoc/lapis/util/functions.moon.uninstall modules/lunadoc/project.moon.uninstall modules/lunadoc/template.moon.uninstall
+uninstall: subdirs.uninstall lunradoc.moon.uninstall lunradoc/doctree.moon.uninstall lunradoc/document.moon.uninstall lunradoc/gsplit.moon.uninstall lunradoc/indent.moon.uninstall lunradoc/init.moon.uninstall lunradoc/lapis/html.moon.uninstall lunradoc/lapis/util/functions.moon.uninstall lunradoc/project.moon.uninstall lunradoc/template.moon.uninstall lunradoc/templates/bulma.moon.uninstall
 	@:
 
 subdirs.uninstall:
@@ -180,7 +193,7 @@ test: all subdirs subdirs.test
 
 subdirs.test:
 
-clean: lunadoc.clean modules/lunadoc/doc_moon.moon.clean modules/lunadoc/document.moon.clean modules/lunadoc/gsplit.moon.clean modules/lunadoc/indent.moon.clean modules/lunadoc/init.moon.clean modules/lunadoc/lapis/html.moon.clean modules/lunadoc/lapis/util/functions.moon.clean modules/lunadoc/project.moon.clean modules/lunadoc/template.moon.clean
+clean: lunradoc.moon.clean lunradoc/doctree.moon.clean lunradoc/document.moon.clean lunradoc/gsplit.moon.clean lunradoc/indent.moon.clean lunradoc/init.moon.clean lunradoc/lapis/html.moon.clean lunradoc/lapis/util/functions.moon.clean lunradoc/project.moon.clean lunradoc/template.moon.clean lunradoc/templates/bulma.moon.clean
 
 distclean: clean
 
@@ -195,79 +208,67 @@ dist-gz: $(PACKAGE)-$(VERSION).tar.gz
 $(PACKAGE)-$(VERSION).tar.gz: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.gz[00m'
 	$(Q)tar czf $(PACKAGE)-$(VERSION).tar.gz \
-		$(PACKAGE)-$(VERSION)/lunadoc.moon \
-		$(PACKAGE)-$(VERSION)/examples/example.template.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/doc_moon.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/document.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/gsplit.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/indent.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/init.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/lapis/html.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/lapis/util/functions.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/project.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/template.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/gsplit.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/indent.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/init.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/project.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/template.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/templates/bulma.moon \
 		$(PACKAGE)-$(VERSION)/project.zsh \
 		$(PACKAGE)-$(VERSION)/Makefile \
-		$(PACKAGE)-$(VERSION)/lunadoc.cfg \
+		$(PACKAGE)-$(VERSION)/lunradoc.cfg \
 		$(PACKAGE)-$(VERSION)/LICENSE.md \
-		$(PACKAGE)-$(VERSION)/README.md \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.1-2.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.2-1.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.3-1.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.4-1.rockspec
+		$(PACKAGE)-$(VERSION)/README.md
 
 dist-xz: $(PACKAGE)-$(VERSION).tar.xz
 $(PACKAGE)-$(VERSION).tar.xz: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.xz[00m'
 	$(Q)tar cJf $(PACKAGE)-$(VERSION).tar.xz \
-		$(PACKAGE)-$(VERSION)/lunadoc.moon \
-		$(PACKAGE)-$(VERSION)/examples/example.template.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/doc_moon.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/document.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/gsplit.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/indent.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/init.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/lapis/html.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/lapis/util/functions.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/project.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/template.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/gsplit.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/indent.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/init.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/project.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/template.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/templates/bulma.moon \
 		$(PACKAGE)-$(VERSION)/project.zsh \
 		$(PACKAGE)-$(VERSION)/Makefile \
-		$(PACKAGE)-$(VERSION)/lunadoc.cfg \
+		$(PACKAGE)-$(VERSION)/lunradoc.cfg \
 		$(PACKAGE)-$(VERSION)/LICENSE.md \
-		$(PACKAGE)-$(VERSION)/README.md \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.1-2.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.2-1.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.3-1.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.4-1.rockspec
+		$(PACKAGE)-$(VERSION)/README.md
 
 dist-bz2: $(PACKAGE)-$(VERSION).tar.bz2
 $(PACKAGE)-$(VERSION).tar.bz2: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.bz2[00m'
 	$(Q)tar cjf $(PACKAGE)-$(VERSION).tar.bz2 \
-		$(PACKAGE)-$(VERSION)/lunadoc.moon \
-		$(PACKAGE)-$(VERSION)/examples/example.template.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/doc_moon.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/document.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/gsplit.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/indent.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/init.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/lapis/html.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/lapis/util/functions.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/project.moon \
-		$(PACKAGE)-$(VERSION)/modules/lunadoc/template.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/gsplit.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/indent.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/init.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/project.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/template.moon \
+		$(PACKAGE)-$(VERSION)/lunradoc/templates/bulma.moon \
 		$(PACKAGE)-$(VERSION)/project.zsh \
 		$(PACKAGE)-$(VERSION)/Makefile \
-		$(PACKAGE)-$(VERSION)/lunadoc.cfg \
+		$(PACKAGE)-$(VERSION)/lunradoc.cfg \
 		$(PACKAGE)-$(VERSION)/LICENSE.md \
-		$(PACKAGE)-$(VERSION)/README.md \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.1-2.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.2-1.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.3-1.rockspec \
-		$(PACKAGE)-$(VERSION)/package/lunadoc-0.4-1.rockspec
+		$(PACKAGE)-$(VERSION)/README.md
 
 help:
-	@echo '[01;37m :: lunadoc-0.5.0[00m'
+	@echo '[01;37m :: lunradoc-0.5.0[00m'
 	@echo ''
 	@echo '[01;37mGeneric targets:[00m'
 	@echo '[00m    - [01;32mhelp          [37m Prints this help message.[00m'
@@ -291,7 +292,7 @@ help:
 	@echo '    - [01;34mLUA_SHAREDIR  [37m ${LUA_SHAREDIR}[00m'
 	@echo ''
 	@echo '[01;37mProject targets: [00m'
-	@echo '    - [01;33mlunadoc       [37m script[00m'
+	@echo '    - [01;33mlunradoc.moon [37m script[00m'
 	@echo ''
 	@echo '[01;37mMakefile options:[00m'
 	@echo '    - gnu:           false'
