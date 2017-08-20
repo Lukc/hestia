@@ -39,7 +39,7 @@ project\loadTemplate args.template -- nil is fine
 
 project\finalize!
 
-for document in project\getDocuments!
+for document in *project.documents
 	outputFilePath = document.outputFilePath
 
 	print 'writing file %s'\format outputFilePath

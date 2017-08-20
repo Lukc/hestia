@@ -57,6 +57,15 @@ class
 
 		@\updateFilesList!
 
+		@documents = with __ = {} -- I really with we had implicit variables.
+			for fileName in *@files
+				document, reason = Document.fromFileName self, fileName
+
+				if document
+					table.insert __, document
+				else
+					print "warning: could not import #{fileName}: #{reason}"
+
 	updateFilesList: =>
 		getFiles = (path) ->
 			coroutine.wrap ->
@@ -148,16 +157,6 @@ class
 					return nil, err
 
 		true
-
-	getDocuments: =>
-		coroutine.wrap ->
-			for fileName in *@files
-				document, reason = Document.fromFileName self, fileName
-
-				if document
-					coroutine.yield document, fileName
-				else
-					print "warning: could not import #{fileName}: #{reason}"
 
 	copyFile: (file, inputPrefix, outputDirectory, ofile) =>
 		ofile or= file

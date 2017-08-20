@@ -175,16 +175,11 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 					div class: "panel", ->
 						div class: "panel-heading", "Files"
 
-						for file in *document.project.files
+						for doc in *document.project.documents
 							a {
 								class: "panel-block"
-								href: "#{document.root}/#{file\gsub("%.[^.]*$", document.project.outputExtension)}",
-
-								-- FIXME: Parse the whole project, and use each document’s title.
-								if file\match "%.moon$"
-									({file\gsub("%.moon$", "")\gsub("/", ".")})[1]
-								else
-									file
+								href: "#{document.root}/#{doc.filename\gsub("%.[^.]*$", document.project.outputExtension)}",
+									-> raw doc.title
 							}
 
 			div class: "column is-three-quarters", ->
