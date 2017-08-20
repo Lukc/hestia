@@ -17,7 +17,7 @@ LDFLAGS :=
 
 Q := @
 
-all: lunradoc.moon lunradoc/doctree.moon lunradoc/document.moon lunradoc/gsplit.moon lunradoc/indent.moon lunradoc/init.moon lunradoc/lapis/html.moon lunradoc/lapis/util/functions.moon lunradoc/project.moon lunradoc/template.moon lunradoc/templates/bulma.moon
+all: lunradoc.moon lunradoc/doctree.moon lunradoc/document.moon lunradoc/lapis/html.moon lunradoc/lapis/util/functions.moon lunradoc/project.moon lunradoc/template.moon lunradoc/templates/bulma.moon
 	@:
 
 lunradoc.moon:
@@ -58,45 +58,6 @@ lunradoc/document.moon.clean:
 lunradoc/document.moon.uninstall:
 	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/document.moon[00m'
 	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/document.moon'
-
-lunradoc/gsplit.moon:
-
-lunradoc/gsplit.moon.install: lunradoc/gsplit.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/gsplit.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
-	$(Q)install -m0755 lunradoc/gsplit.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/gsplit.moon
-
-lunradoc/gsplit.moon.clean:
-
-lunradoc/gsplit.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/gsplit.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/gsplit.moon'
-
-lunradoc/indent.moon:
-
-lunradoc/indent.moon.install: lunradoc/indent.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/indent.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
-	$(Q)install -m0755 lunradoc/indent.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/indent.moon
-
-lunradoc/indent.moon.clean:
-
-lunradoc/indent.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/indent.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/indent.moon'
-
-lunradoc/init.moon:
-
-lunradoc/init.moon.install: lunradoc/init.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/init.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
-	$(Q)install -m0755 lunradoc/init.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/init.moon
-
-lunradoc/init.moon.clean:
-
-lunradoc/init.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/init.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/init.moon'
 
 lunradoc/lapis/html.moon:
 
@@ -178,12 +139,12 @@ $(DESTDIR)$(SHAREDIR):
 $(DESTDIR)$(INCLUDEDIR):
 	@echo '[01;35m  DIR >   [01;37m$(INCLUDEDIR)[00m'
 	$(Q)mkdir -p $(DESTDIR)$(INCLUDEDIR)
-install: subdirs.install lunradoc.moon.install lunradoc/doctree.moon.install lunradoc/document.moon.install lunradoc/gsplit.moon.install lunradoc/indent.moon.install lunradoc/init.moon.install lunradoc/lapis/html.moon.install lunradoc/lapis/util/functions.moon.install lunradoc/project.moon.install lunradoc/template.moon.install lunradoc/templates/bulma.moon.install
+install: subdirs.install lunradoc.moon.install lunradoc/doctree.moon.install lunradoc/document.moon.install lunradoc/lapis/html.moon.install lunradoc/lapis/util/functions.moon.install lunradoc/project.moon.install lunradoc/template.moon.install lunradoc/templates/bulma.moon.install
 	@:
 
 subdirs.install:
 
-uninstall: subdirs.uninstall lunradoc.moon.uninstall lunradoc/doctree.moon.uninstall lunradoc/document.moon.uninstall lunradoc/gsplit.moon.uninstall lunradoc/indent.moon.uninstall lunradoc/init.moon.uninstall lunradoc/lapis/html.moon.uninstall lunradoc/lapis/util/functions.moon.uninstall lunradoc/project.moon.uninstall lunradoc/template.moon.uninstall lunradoc/templates/bulma.moon.uninstall
+uninstall: subdirs.uninstall lunradoc.moon.uninstall lunradoc/doctree.moon.uninstall lunradoc/document.moon.uninstall lunradoc/lapis/html.moon.uninstall lunradoc/lapis/util/functions.moon.uninstall lunradoc/project.moon.uninstall lunradoc/template.moon.uninstall lunradoc/templates/bulma.moon.uninstall
 	@:
 
 subdirs.uninstall:
@@ -193,7 +154,7 @@ test: all subdirs subdirs.test
 
 subdirs.test:
 
-clean: lunradoc.moon.clean lunradoc/doctree.moon.clean lunradoc/document.moon.clean lunradoc/gsplit.moon.clean lunradoc/indent.moon.clean lunradoc/init.moon.clean lunradoc/lapis/html.moon.clean lunradoc/lapis/util/functions.moon.clean lunradoc/project.moon.clean lunradoc/template.moon.clean lunradoc/templates/bulma.moon.clean
+clean: lunradoc.moon.clean lunradoc/doctree.moon.clean lunradoc/document.moon.clean lunradoc/lapis/html.moon.clean lunradoc/lapis/util/functions.moon.clean lunradoc/project.moon.clean lunradoc/template.moon.clean lunradoc/templates/bulma.moon.clean
 
 distclean: clean
 
@@ -210,9 +171,6 @@ $(PACKAGE)-$(VERSION).tar.gz: distdir
 	$(Q)tar czf $(PACKAGE)-$(VERSION).tar.gz \
 		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/gsplit.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/indent.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/init.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc.moon \
@@ -231,9 +189,6 @@ $(PACKAGE)-$(VERSION).tar.xz: distdir
 	$(Q)tar cJf $(PACKAGE)-$(VERSION).tar.xz \
 		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/gsplit.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/indent.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/init.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc.moon \
@@ -252,9 +207,6 @@ $(PACKAGE)-$(VERSION).tar.bz2: distdir
 	$(Q)tar cjf $(PACKAGE)-$(VERSION).tar.bz2 \
 		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/gsplit.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/indent.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/init.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
 		$(PACKAGE)-$(VERSION)/lunradoc.moon \

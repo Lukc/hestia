@@ -26,7 +26,10 @@ createDirectory = (path) ->
 -- Contains most of the documentation-import code.
 ---
 class Document
-	new: (@project, @filename) =>
+	---
+	-- @param project  (Project) Project this document will be a part of.
+	-- @param filename (string)  Filename to the document to parse and document.
+	new: (@project, @filename) => --- @return Document
 		@file = @filename -- FIXME: LEGACY
 
 		@root = @filename\gsub "[^/][^/]+/",  "../"
@@ -43,14 +46,40 @@ class Document
 
 		@outputFilePath = @project.outputDirectory .. @filename\gsub('%.[^%.]+$', @project.outputExtension)
 
-	__tostring: =>
+	__tostring: => --- @return string
 		"<Document, #{@filename}>"
 
+	---
+	-- Tries to parse the Moonscript file and generate a DocTree from it.
+	--
+	-- @return true | nil, string
+	--
+	-- @param project   (string)
+	-- @param filename  (string)
+	-- @param file      (file)
 	importMoon: (project, filename, file) =>
 		tree, reason = DocTree file\read "*all"
 
+		if tree.type == "class"
+			tree.name or= filename\gsub("%.moon", "")\gsub("^.*/", "")\gsub("^.", (s) -> s\upper!)
+
+			@title = "Class <code>#{tree.name}</code>"
+		elseif tree.type == "table"
+			tree.name or= filename\gsub("%.moon", "")\gsub("/", ".")
+			@title = "Module <code>#{tree.name}</code>"
+		else
+			tree.name or= filename\gsub("%.moon", "")\gsub("^.*/", "")
+
 		unless tree
-			return nil, "could not generate doctree from file", reason
+			@body = [[
+<div class="error notification is-danger">
+	Something bad happened while trying to generate the documentation for that file. :(
+</div>
+]]
+
+			-- Not critical enough to make everything go to hell.
+			print "warning: could not generate doctree from file: ", reason
+			return
 
 		-- FIXME: IMHO, we shouldn’t generate the document as a whole, but bit by bit.
 		--data, reason = discount.compile(markdown, unpack(project.discountFlags))
@@ -60,6 +89,18 @@ class Document
 		--@body = data.body
 		--@index = data.index
 
+	---
+	-- Manual imports from Markdown file.
+	--
+	-- They’re basically read, piped through discount, and output as-is.
+	--
+	-- It sets the `@body` attribute and provides no docTree.
+	--
+	-- @return true | nil, string
+	--
+	-- @param project   (string)
+	-- @param filename  (string)
+	-- @param file      (file)
 	importMd: (project, filename, file) =>
 		markdown = file\read "*all"
 
@@ -73,6 +114,13 @@ class Document
 
 	---
 	-- Creates a Document from a given filename and attaches it to a given project.
+	--
+	-- @return Document | nil, string
+	--
+	-- @param project (Project)
+	-- @param filename (string)
+	--
+	-- @constructor
 	---
 	@fromFileName: (project, filename) ->
 		extension = filename\match "^.+%.(.+)$"

@@ -40,39 +40,100 @@ getPreCommentForLine=(code,line)->
 
 	return table.concat([(trim get_line code, l)\sub l==startline and 5 or 4 for l=startline,endline], '\n') .. "\n"
 
+getAnnotation = (code, lineNo) ->
+	line = trim(get_line code, lineNo)
+
+	if line\match "%-%-%-"
+		return line\gsub "^.*%-%-%-* *", ""
+
+getLines = (string) ->
+	if string\sub(-1) ~= "\n"
+		string ..= "\n"
+
+	string\gmatch "(.-)\n"
+
+parseTags = (self, comment) ->
+	for tagLine in getLines comment
+		tagLine = trim tagLine
+
+		unless tagLine\match "^@"
+			continue
+
+		tag, data = tagLine\match "^@([a-z][a-zA-Z0-9]*) *([^\n]*)"
+
+		switch tag
+			when "return"
+				unless self.returnValues
+					print "warning: trying to add @return to a non-function."
+					continue
+
+				for rValueSet in data\gmatch "[^|]*"
+					table.insert self.returnValues, {}
+
+					for rValue in rValueSet\gmatch "%w+"
+						table.insert self.returnValues[#self.returnValues],
+							rValue
+
+					if #self.returnValues[#self.returnValues] == 0
+						table.remove self.returnValues
+			when "treturn"
+				-- LDoc compatibility. =/
+				parseTags self, "@return #{data\gsub "(%S+)%s*(.*)", (s1, s2) -> "(#{s1})"}"
+			when "param"
+				argName, argType, argDesc = trim(data)\match "^(%w+)%s*(%([^)]+%))%s*(.*)"
+
+				findArg = (self, name) ->
+					for arg in *(self.arguments or {})
+						if arg.name == name
+							return arg
+
+				if argName
+					arg = findArg self, argName
+
+					if argType
+						-- Removing parens.
+						argType = argType\sub(2, argType\len! - 1)
+
+					unless arg
+						print "warning: documentation for unrecognized arg: #{argName}"
+						continue
+
+					-- FIXME: Actually split argType, plz
+					arg.type = {argType}
+					arg.description = argDesc
+			when "tparam"
+				-- LDoc compatibility. =/
+				parseTags self, "@param #{data\gsub "(%S+)%s+(%S+)%s*(.*)", (s1, s2, s3) -> "#{s2} (#{s1}) #{s3}"}"
+			when "constructor"
+				self.tags or= {}
+				self.tags.constructor = true
+			when "info", "warning", "issue"
+				self[tag] or= {}
+				table.insert self[tag], data
+			when "see"
+				for reference in data\gmatch "%S+"
+					table.insert self.see, reference
+			else
+				print "warning: unhandled tag detected: #{tag}"
+
+	return comment\gsub "\n@[a-z][^\n]*", "\n"
+
 ---
 -- Doctree generation below.
 -- 
 getValue = (tree, content) ->
-	if type(tree[1]) == "table"
-		if tree[1]
-			return getValue tree[1], content
-
-		-- No idea what I’m doing. =/
-		return nil, "could not parse AST"
-
-	with {}
+	with self = {}
 		.type = tree[1]
+
+		.see = {}
 
 		if tree[-1]
 			.line = pos_to_line content, tree[-1]
 			.comment = getPreCommentForLine content, .line
 
-			if .comment
-				result, err = discount.compile(.comment)
-
-				if result
-					.comment = result.body
-				else
-					print "(doctree) discount error: #{err}"
-
 		if type(.type) == "table"
 			print "[internal error]: getValue called on table"
-			return nil
-		--	.type = "table"
-		--	.elements = {}
-		--	for k,v in pairs tree[1]
-		--		.elements[k] = getValue v, content
+			return nil, "getValue called on something that starts with a table"
 		elseif .type == "import"
 			-- Do nothing?
 			true
@@ -81,11 +142,31 @@ getValue = (tree, content) ->
 
 			for i = 1, #tree[2]
 				key = getValue tree[2][i][1], content
-				value = getValue tree[2][i][2], content
+				value = tree[2][i][2] and getValue tree[2][i][2], content
+
+				unless value
+					value = key
+
+					key = {
+						type: "number"
+						value: i
+					}
 
 				table.insert .elements, {
 					:key, :value
 				}
+
+--			if type(tree[2][1][1]) != "string"
+--				for i = 1, #tree[2][1]
+--					value = getValue tree[2][1][i], content
+--					key = {
+--						type: "number"
+--						value: i
+--					}
+
+--					table.insert .elements, {
+--						:key, :value
+--					}
 		elseif .type == "assign"
 			.reference = getValue tree[2][1], content
 			.value = getValue tree[3][1], content
@@ -125,6 +206,7 @@ getValue = (tree, content) ->
 			for i = 1, #tree[2]
 				argument = tree[2][i]
 
+				-- FIXME: Not only is this ugly, but default values are missing.
 				if type(argument[1]) == "table"
 					argument = getValue argument[1], content
 
@@ -143,12 +225,6 @@ getValue = (tree, content) ->
 						name: argument[1]
 
 				table.insert .arguments, argument
-		elseif .type == "chain"
-			.call = tree[2][2]
-			.arguments = {}
-
-			for i = 1, #tree[3][2]
-				table.insert .arguments, getValue tree[3][2][i], content
 		elseif .type == "string"
 			.value = tree[3]
 			.quoteType = tree[2]
@@ -157,15 +233,36 @@ getValue = (tree, content) ->
 		elseif .type == "props"
 			-- Not really parsed. The class thing will deal with it… probably.
 			.value = tree[2]
+		elseif .type == "chain" or .type == "call"
+			-- Not really documentable as-is. Special cases will be handled later… if need be.
+			.ast = tree
 		else
 			print "[internal error]: unrecognized type #{.type}"
 
 			.value = tree[2]
 
+		if .line
+			if .comment
+				.comment = parseTags self, .comment
+
+			if .comment
+				result, err = discount.compile(.comment)
+
+				if result
+					.comment = result.body
+				else
+					print "(doctree) discount error: #{err}"
+
+			annotation = getAnnotation content, .line
+			if annotation
+				parseTags self, annotation
+
 
 parseClass = (classBody) =>
 	@name or= classBody.name
 	@comment or= classBody.comment
+
+	-- FIXME: methods/attributes doesn’t describe how we’re sorting them anymore.
 	@methods or= {}
 	@attributes or= {}
 	@constructors or= {}
@@ -176,92 +273,130 @@ parseClass = (classBody) =>
 		key = value[1]
 		attribute = value[2]
 
+		constructorTag = attribute.tags and attribute.tags.constructor
+
 		-- Valid, documentable identifier.
-		if key.type == "key_literal"
-			array = if key.value == "new" or key.value == "__init"
+		array = if key.type == "key_literal"
+			if constructorTag or key.value == "new" or key.value == "__init"
+				key.value = nil
 			-- FIXME: Needs to be configurable…
 				@constructors
 			elseif attribute.type == "method"
 				@methods
 			else
 				@attributes
+		elseif key.type == "reference" and key.value\sub(1,1) == "@"
+			key.value = key.value\sub 2, key.value\len!
+
+			if constructorTag
+				@constructors
+			else
+				@attributes
+
+		if array
+			if array == @constructors
+				if #attribute.returnValues == 0 and @name
+					table.insert attribute.returnValues, {@name}
 
 			table.insert array, {
 				name: key.value
 				value: attribute
 			}
-		elseif key.type == "reference" and key.value\sub(1,1) == "@"
-			table.insert @attributes, {
-				name: key.value\sub(2, key.value\len!)
-				value: attribute
-			}
 
 	self
 
-isClassGen = (value) ->
+isClassGen = (value, code) ->
+	local name
+
 	if value.type == "chain"
-		if value.call == "Class"
-			arg1 = value.arguments[1]
-			arg2 = value.arguments[2]
+		ast = value.ast
 
-			if arg1 and arg1.type == "table"
-				fields = {}
+		Class = getValue ast[2], code
+		if Class.type != "reference" or Class.value != "Class"
+			print "Not referencing Class."
+			print "Referencing...", Class.type, Class.value
+			return
 
-				for _, e in pairs value.arguments[1].elements
-					table.insert fields, {e.key, e.value}
+		call = getValue ast[3], code
+		if call.type != "call"
+			print "Not calling Class."
+			return
 
-				return {
-					comment: value.comment
+		print "We MAY have a Class on our hands!!!"
 
-					:fields
-				}
+		arg1 = getValue call.ast[2][1], code
+		arg2 = call.ast[2][2] and getValue call.ast[2][2], code
 
-			if arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
-				fields = {}
+		if arg1 and arg1.type == "table"
+			fields = {}
 
-				for _, e in pairs value.arguments[2].elements
-					table.insert fields, {e.key, e.value}
+			for _, e in pairs arg1.elements
+				table.insert fields, {e.key, e.value}
 
-				return {
-					comment: value.comment
+			return {
+				comment: value.comment
 
-					:fields
-				}
+				:fields
+			}
+
+		if arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
+			name = arg1.value
+			fields = {}
+
+			for _, e in pairs arg2.elements
+				table.insert fields, {e.key, e.value}
+
+			return {
+				:name
+
+				comment: value.comment
+				see: value.see
+
+				:fields
+			}
 
 ---
--- Hey, comment here.
-parseDocTree = (string) ->
+-- Converts a Moonscript AST into… well… something close, but simplified and
+-- that includes documentation comments, as well as some other sorts of metadata.
+--
+-- Takes care of parsing `@tags` and stuff.
+--
+-- Called a “DocTree” or “Documentation Tree” because the objective was to
+-- create a tree of documentable (and possibly documented) objects that was
+-- language-independent. Not sure I really did that, but, oh, well…
+(string) ->
 	tree, reason = parse.string string
 
 	unless tree
 		return nil, "could not parse moonscript", reason
 
-	t = getValue(tree[#tree], string).type
+	success, value, reason = pcall ->
+		getValue(tree[#tree], string)
+
+	unless success
+		return nil, value
+
+	unless value
+		return nil, reason
+
+	t = value.type
 
 	switch t
 		when "class"
 			parseClass {
 				type: "class"
-			}, getValue tree[#tree], string
+			}, value
 		when "chain"
-			chain = getValue tree[#tree], string
+			chain = value
 
-			classBody = isClassGen chain
+			classBody = isClassGen chain, string
 			if classBody
 				parseClass {
 					type: "class"
 				}, classBody
+			else
+				-- Well, good luck with it. =/
+				chain
 		else
-			getValue tree, string
-
--- Actually, don’t use this. Ever.
-toHtml = (value) ->
-	render_html ->
-		div ->
-			p "type"
-			p value.type
-
-setmetatable {
-	:toHtml
-}, __call: (...) => parseDocTree ...
+			value
 
