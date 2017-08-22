@@ -81,9 +81,6 @@ class Document
 			print "warning: could not generate doctree from file: ", reason
 			return
 
-		-- FIXME: IMHO, we shouldn’t generate the document as a whole, but bit by bit.
-		--data, reason = discount.compile(markdown, unpack(project.discountFlags))
-
 		@docTree = tree
 
 		--@body = data.body
