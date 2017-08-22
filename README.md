@@ -3,9 +3,22 @@ Experimental documentation generator for Moonscript.
 
 # Installation
 
+## Dependencies
+
+- Moonscript
+- lua-discount
+- lua-argparse
+- luafilesystem
+- loadkit
+- etlua (Will probably get removed Soon™.)
+
 ## from git
 
-* Run `make LUA_VERSION=5.3 PREFIX=/usr install` or `make help`.
+Run `make LUA_VERSION=5.3 PREFIX=/usr install` to install.
+
+Lua 5.1 and 5.2 are also supported. Just change the above variable from the command-line. :)
+
+Other options are editable dynamically. Run `make help` to get an overview of what those are.
 
 # Usage
 

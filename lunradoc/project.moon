@@ -16,6 +16,11 @@ findJs = make_loader "js"
 -- Represents a project.
 ---
 class
+	@LUNRADOC_VERSION: "0.5.0"
+
+	---
+	-- @constructor
+	-- @return Project | nil, string
 	@fromConfiguration: (filepath = "lunradoc.cfg") ->
 		file, reason = io.open filepath, "r"
 
@@ -24,6 +29,10 @@ class
 
 		return @@.fromFile file
 
+	---
+	-- @constructor
+	-- @return (Project)
+	-- @return (nil, string) Could not parse the configuration file.
 	@fromFile: (file) ->
 		content = file\read "*a"
 
@@ -38,7 +47,7 @@ class
 					-- FIXME: Not complete.
 					-- FIXME: Ugly names (we could keep legacy compat, though).
 					-- FIXME: No checking of valid types and stuff. (automated type checking?)
-					when "files", "inputPrefix", "outputDirectory", "title", "date", "author", "outputExtension", "hljsstyle"
+					when "files", "inputPrefix", "outputDirectory", "title", "version", "date", "author", "outputExtension", "hljsstyle"
 						config[key] = value
 
 					-- FIXME: Check file existence and permissions.
@@ -46,7 +55,6 @@ class
 						config[key] = value
 					when "template"
 						config.template = value
-
 					else
 						print "warning: unrecognized key in configuration file: #{key}"
 
@@ -65,6 +73,9 @@ class
 					table.insert __, document
 				else
 					print "warning: could not import #{fileName}: #{reason}"
+
+		print "Registering index."
+		table.insert @documents, 1, Document.index self
 
 	updateFilesList: =>
 		getFiles = (path) ->
@@ -97,7 +108,9 @@ class
 							print "Registering #{nFile}."
 							table.insert files, nFile
 
+					print "Unregistering #{file}"
 					table.remove files, index
+					continue
 
 				index += 1
 
@@ -176,4 +189,6 @@ class
 			return nil, err
 
 		ohandle\write ihandle\read'*a'
+
+	__tostring: => "<Project: #{@title}>"
 

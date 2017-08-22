@@ -47,7 +47,7 @@ class Document
 		@outputFilePath = @project.outputDirectory .. @filename\gsub('%.[^%.]+$', @project.outputExtension)
 
 	__tostring: => --- @return string
-		"<Document, #{@filename}>"
+		"<Document: \"#{@filename}\">"
 
 	---
 	-- Tries to parse the Moonscript file and generate a DocTree from it.
@@ -63,10 +63,10 @@ class Document
 		if tree.type == "class"
 			tree.name or= filename\gsub("%.moon", "")\gsub("^.*/", "")\gsub("^.", (s) -> s\upper!)
 
-			@title = "Class <code>#{tree.name}</code>"
+			@title = tree.name
 		elseif tree.type == "table"
 			tree.name or= filename\gsub("%.moon", "")\gsub("/", ".")
-			@title = "Module <code>#{tree.name}</code>"
+			@title = tree.name
 		else
 			tree.name or= filename\gsub("%.moon", "")\gsub("^.*/", "")
 
@@ -123,21 +123,25 @@ class Document
 	-- @constructor
 	---
 	@fromFileName: (project, filename) ->
+		attr = attributes filename
+
 		extension = filename\match "^.+%.(.+)$"
 		unless extension
 			return nil, "could not identify file type"
 
 		methodName = "import" .. extension\gsub("^.", (s) -> s\upper!)
 
+		file, reason = io.open filename, "r"
+		unless file
+			return nil, reason
+
 		self = @@ project, filename
 
 		if @@[methodName]
-			file, reason = io.open filename, "r"
-			unless file
-				return nil, reason
-
 			_, reason = @@[methodName] self, project, filename, file
-			file\close!
+
+			if file
+				file\close!
 
 			if reason
 				return nil, reason
@@ -146,9 +150,66 @@ class Document
 		else
 			return nil, "unrecognized file"
 
+	---
+	-- Special constructor for the index of the documentation directory tree.
+	-- @constructor
+	@index: (project) ->
+		self = @@ project, "."
+
+		@outputFilePath = @project.outputDirectory .. "index" .. @project.outputExtension
+		print @outputFilePath
+
+		@title = "Index"
+
+		-- No @body and no @doctree.
+		@generateIndex = true
+
+		self
+
 	createDirectories: =>
 		directory = @outputFilePath\match '^(.+)/[^/]+'
 
 		if directory
 			createDirectory directory
+
+	typeReference: (string) =>
+		module, key = string\match "^([^.]*)[\\.]([^.]*)$"
+		unless module
+			key = string\match "%.([^.]*)$"
+
+		unless key
+			module = string
+
+		if key
+			key = "#" .. key
+
+		if module == ""
+			return "#" .. key
+
+		for document in *@project.documents
+			if module == document.title
+				return @root .. "/" .. document.filename\gsub("%.moon", @project.outputExtension) .. (key or "")
+
+	generateAnchor: (docTree) =>
+		-- FIXME: This function puts light on brokenness in DocTree.
+
+		-- Classes.
+		if docTree.name
+			return docTree.name
+
+		-- Tables. =/
+		if docTree.key
+			if type(docTree.key.value) == "string"
+				return docTree.key.value
+			else
+				return docTree.key.value.value
+
+		""
+
+	linkTo: (document) =>
+		-- start and end of substring.
+		s = @project.outputDirectory\len! + 1
+		e = document.outputFilePath\len!
+
+		@root .. "/" .. document.outputFilePath\sub(s, e)
 

@@ -63,12 +63,16 @@ parseTags = (self, comment) ->
 
 		switch tag
 			when "return"
+				returnType, returnDesc = trim(data)\match "^(%([^)]+%))%s*(.*)"
+
 				unless self.returnValues
 					print "warning: trying to add @return to a non-function."
 					continue
 
-				for rValueSet in data\gmatch "[^|]*"
-					table.insert self.returnValues, {}
+				for rValueSet in (returnType or data)\gmatch "[^|]*"
+					table.insert self.returnValues, {
+						description: returnDesc
+					}
 
 					for rValue in rValueSet\gmatch "%w+"
 						table.insert self.returnValues[#self.returnValues],
@@ -262,10 +266,9 @@ parseClass = (classBody) =>
 	@name or= classBody.name
 	@comment or= classBody.comment
 
-	-- FIXME: methods/attributes doesn’t describe how we’re sorting them anymore.
-	@methods or= {}
+	@instanceAttributes or= {}
 	@attributes or= {}
-	@constructors or= {}
+	@constructors or= {} -- They’re class attributes too… should we remove the category?
 
 	for i = 1, #classBody.fields
 		value = classBody.fields[i]
@@ -282,7 +285,7 @@ parseClass = (classBody) =>
 			-- FIXME: Needs to be configurable…
 				@constructors
 			elseif attribute.type == "method"
-				@methods
+				@instanceAttributes
 			else
 				@attributes
 		elseif key.type == "reference" and key.value\sub(1,1) == "@"
@@ -313,24 +316,23 @@ isClassGen = (value, code) ->
 
 		Class = getValue ast[2], code
 		if Class.type != "reference" or Class.value != "Class"
-			print "Not referencing Class."
-			print "Referencing...", Class.type, Class.value
-			return
+			return nil, "does not start with a reference to a class constructor"
 
 		call = getValue ast[3], code
 		if call.type != "call"
-			print "Not calling Class."
-			return
-
-		print "We MAY have a Class on our hands!!!"
+			return nil, "not a call to a class constructor"
 
 		arg1 = getValue call.ast[2][1], code
 		arg2 = call.ast[2][2] and getValue call.ast[2][2], code
 
-		if arg1 and arg1.type == "table"
-			fields = {}
+		fields = {}
+		argsList, name = if arg1 and arg1.type == "table"
+			arg1.elements
+		elseif arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
+			arg2.elements ,arg1.value
 
-			for _, e in pairs arg1.elements
+		if argsList
+			for _, e in pairs argsList
 				table.insert fields, {e.key, e.value}
 
 			return {
@@ -339,21 +341,6 @@ isClassGen = (value, code) ->
 				:fields
 			}
 
-		if arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
-			name = arg1.value
-			fields = {}
-
-			for _, e in pairs arg2.elements
-				table.insert fields, {e.key, e.value}
-
-			return {
-				:name
-
-				comment: value.comment
-				see: value.see
-
-				:fields
-			}
 
 ---
 -- Converts a Moonscript AST into… well… something close, but simplified and
