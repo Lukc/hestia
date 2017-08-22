@@ -171,15 +171,17 @@ drawCard = (field, root, section) ->
 	div class: "card is-spaced", id: document\generateAnchor(field), ->
 		div class: "card-header", ->
 			h4 class: "card-header-title title is-3 prototype", ->
+				if section.title == "Constructors" or not section.title
+					text tostring root.name\gsub ".*%.", ""
+
+					if (key and key.value) or field.name
+						text "."
+
 				-- FIXME: field.key, value.name ? Same thing, different places. That sucks.
 				if key
 					text key.value
-
-				if section.title == "Constructors" or not section.title
-					text root.name
-					if field.name
-						text "."
-				text field.name
+				else
+					text field.name
 
 				span class: "subtitle is-4", ->
 					if value.type != "function" and value.type != "method"
