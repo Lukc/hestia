@@ -238,49 +238,66 @@ drawTOC = ->
 			-- FIXME: Sort by directory? =/
 			root = document.docTree
 
+			sections = {}
+
 			if root.type == "table"
-				for field in *root.elements
-					li ->
-						if field.key
-							a href: "#" .. document\generateAnchor(field), ->
-								p field.key.value
+				sections = {
+					{
+						elements: root.elements
+						drawElement: (element) ->
+							if element.key
+								a href: "#" .. document\generateAnchor(element), ->
+									p element.key.value
+
+									p class: "content", ->
+										code -> drawValue(element.value, noLinks: true)
+					}
+				}
+			elseif root.type == "class"
+				sections = {
+					{
+						title: "Constructors"
+						elements: root.constructors
+						drawElement: (element) ->
+							a href: "#" .. document\generateAnchor(element), ->
+								p text element.name
 
 								p class: "content", ->
-									code -> drawValue(field.value, noLinks: true)
-			elseif root.type == "class"
-				if #root.constructors > 0
-					li ->
-						p class: "menu-label", "Constructors"
-						ul ->
-							for field in *root.constructors
-								li ->
-									a href: "#" .. document\generateAnchor(field), ->
-										p text field.name
+									code -> drawValue(element.value, noLinks: true)
+					}
+					{
+						title: "Instance"
+						elements: root.instanceAttributes
+						drawElement: (element) ->
+							a href: "#" .. document\generateAnchor(element), ->
+								p text element.name
 
-										p class: "content", ->
-											code -> drawValue(field.value, noLinks: true)
-				if #root.instanceAttributes > 0
-					li ->
-						p class: "menu-label", "Instance"
-						ul ->
-							for field in *root.instanceAttributes
-								li ->
-									a href: "#" .. document\generateAnchor(field), ->
-										p text field.name
+								p class: "content", ->
+									code -> drawValue(element.value, noLinks: true)
+					}
+					{
+						title: "Class"
+						elements: root.attributes
+						drawElement: (element) ->
+							a href: "#" .. document\generateAnchor(element), ->
+								p text element.name
 
-										p class: "content", ->
-											code -> drawValue(field.value, noLinks: true)
-				if #root.attributes > 0
-					li ->
-						p class: "menu-label", "Class"
-						ul ->
-							for field in *root.attributes
-								li ->
-									a href: "#" .. document\generateAnchor(field), ->
-										p text field.name
+								p class: "content", ->
+									code -> drawValue(element.value, noLinks: true)
+					}
+				}
 
-										p class: "content", ->
-											code -> drawValue(field.value, noLinks: true)
+			for section in *sections
+				if #section.elements == 0
+					continue
+
+				li ->
+					if section.title
+						p class: "menu-label", section.title
+
+					ul ->
+						for element in *section.elements
+							section.drawElement element
 
 drawIndex = ->
 	div class: "section", ->
