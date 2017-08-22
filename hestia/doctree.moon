@@ -250,10 +250,11 @@ getValue = (tree, content) ->
 				.comment = parseTags self, .comment
 
 			if .comment
-				result, err = discount.compile(.comment, "fencedcode", "dlextra")
+				result, err = discount.compile(.comment, "toc", "fencedcode", "dlextra")
 
 				if result
 					.comment = result.body
+					.commentIndex = result.index
 				else
 					print "(doctree) discount error: #{err}"
 

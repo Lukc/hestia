@@ -218,6 +218,22 @@ drawCard = (field, root, category) ->
 drawTOC = ->
 	nav class: "menu", ->
 		p class: "title is-5", "Table of Contents"
+
+		index = document.index or (document.docTree and document.docTree.commentIndex)
+		if index
+			div ->
+				-- FIXME: This is highly dependent on Discount’s implementation.
+				index = index\gsub "<ul>", "<ul class=\"menu-list\">"
+
+				-- No more than two levels of depth.
+				index = index\gsub "\n   [^\n]*", ""
+
+				print index
+				raw index
+
+		unless document.docTree
+			return
+
 		ul class: "menu-list", ->
 			-- FIXME: Sort by directory? =/
 			root = document.docTree
@@ -391,7 +407,6 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 				div class: "level-left", ->
 					div class: "level-item", ->
 						h1 class: "title is-1", ->
-							-- FIXME: implement project.index?
 							a class: "has-text-dark", href: document.root, ->
 								text project.title
 
@@ -417,9 +432,6 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 			div class: "columns", ->
 				div class: "column is-one-quarter", ->
 					section class: "section", ->
-						unless document.docTree
-							return
-
 						drawTOC!
 
 				div class: "column is-three-quarters", ->
@@ -440,10 +452,6 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 						if document.docTree
 							h2 class: "subtitle is-3 module-type", ->
 								text document.filename
-
-						if document.index
-							div class: "content", ->
-								raw document.index
 
 						if document.body
 							div class: "content", ->
