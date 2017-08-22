@@ -197,8 +197,8 @@ drawCard = (field, root, category) ->
 
 				drawReturnValues value
 
-		if value.see and #value.see > 0
-			drawSeeAlso value
+			if value.see and #value.see > 0
+				drawSeeAlso value
 
 			for type in *{"info", "warning", "issue"}
 				if value[type] and #value[type] > 0
@@ -211,8 +211,8 @@ drawCard = (field, root, category) ->
 							when "issue"
 								"is-danger"
 
-						div class: "tags has-addon", ->
-							div class: "tag #{cssClass} is-medium", type\gsub "^.", (s) -> s\upper!
+						div class: "tags has-addons", ->
+							div class: "tag #{cssClass} is-medium", tostring type\gsub "^.", (s) -> s\upper!
 							div class: "tag is-dark is-medium", message
 
 drawTOC = ->
