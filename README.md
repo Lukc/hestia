@@ -49,7 +49,7 @@ Also, `.md` files will be handled as plain markdown and converted to html.
 
 The markdown parser is [discount](https://github.com/craigbarnes/lua-discount).
 
-Add a file `lunradoc.cfg` to your project:
+Add a file `hestia.cfg` to your project:
 
 ```moonscript
 title: 'The name of your project'
@@ -76,5 +76,5 @@ discountFlags: { -- flags for discount, omit to use the default flags shown here
 }
 ```
 
-then run `lunradoc`.
+then run `hestia`.
 

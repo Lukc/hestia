@@ -21,7 +21,7 @@ class Template
 		unless template
 			return nil, "moonscript could not load template file", reason, filePath
 
-		{:render_html} = require "lunradoc.lapis.html"
+		{:render_html} = require "hestia.lapis.html"
 
 		@@ (document) ->
 			environment = {k, v for k, v in pairs _G}

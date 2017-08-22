@@ -2,7 +2,7 @@
 {:mkdir, :attributes} = require "lfs"
 discount = require "discount"
 
-DocTree = require "lunradoc.doctree"
+DocTree = require "hestia.doctree"
 
 unpack = unpack or table.unpack
 

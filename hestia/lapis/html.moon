@@ -1,20 +1,11 @@
 
----
--- Imported from Lapis, edited to work with Lua 5.3+.
---
--- Stuff that had to be modified:
---
---   - getfenv and setfenv are imported from moonscript.util.
---   - lapis.util.functions had to be imported as well.
----
-
 import concat, insert from table
 
 _G = _G
 import type, pairs, ipairs, tostring, getmetatable,
   setmetatable, table from _G
 
-import locked_fn, release_fn from require "lunradoc.lapis.util.functions"
+import locked_fn, release_fn from require "hestia.lapis.util.functions"
 import getfenv, setfenv from require "moonscript.util"
 
 CONTENT_FOR_PREFIX = "_content_for_"
@@ -408,5 +399,15 @@ class Widget
     @_buffer.widget = old_widget
     nil
 
-{ :Widget, :Buffer, :html_writer, :render_html, :escape, :unescape, :classnames, :CONTENT_FOR_PREFIX }
+---
+-- Imported from Lapis, edited to work with Lua 5.3+.
+--
+-- Stuff that had to be modified:
+--
+--   - getfenv and setfenv are imported from moonscript.util.
+--   - lapis.util.functions had to be imported as well.
+---
+{
+	:Widget, :Buffer, :html_writer, :render_html, :escape, :unescape, :classnames, :CONTENT_FOR_PREFIX
+}
 

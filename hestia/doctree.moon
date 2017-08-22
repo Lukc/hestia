@@ -3,7 +3,7 @@ discount = require "discount"
 
 parse = require "moonscript.parse"
 
-{:render_html} = require "lunradoc.lapis.html"
+{:render_html} = require "hestia.lapis.html"
 
 ---
 -- Imports from lunadoc’s code, because.

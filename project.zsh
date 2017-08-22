@@ -1,5 +1,5 @@
 
-package=(lunradoc)
+package=(hestia)
 version="0.5.0"
 
 variables=(
@@ -7,11 +7,11 @@ variables=(
 	LUA_SHAREDIR '$(SHAREDIR)/lua/$(LUA_VERSION)'
 )
 
-targets=(lunradoc.moon)
-type[lunradoc.moon]="script"
-filename[lunradoc.moon]="lunradoc"
+targets=(hestia.moon)
+type[hestia.moon]="script"
+filename[hestia.moon]="hestia"
 
-for file in lunradoc/**/*.moon; do
+for file in hestia/**/*.moon; do
 	if [[ "$file" =~ ^examples/.* ]]; then
 		continue
 	fi
@@ -23,12 +23,12 @@ for file in lunradoc/**/*.moon; do
 done
 
 dist=(
-	lunradoc.moon
+	hestia.moon
 	**/*.moon
 	# build.zsh
 	project.zsh Makefile
 	# Documentation
-	lunradoc.cfg
+	hestia.cfg
 	**/*.md
 )
 

@@ -215,14 +215,138 @@ drawCard = (field, root, category) ->
 							div class: "tag #{cssClass} is-medium", type\gsub "^.", (s) -> s\upper!
 							div class: "tag is-dark is-medium", message
 
+drawTOC = ->
+	nav class: "menu", ->
+		p class: "title is-5", "Table of Contents"
+		ul class: "menu-list", ->
+			-- FIXME: Sort by directory? =/
+			root = document.docTree
+
+			if root.type == "table"
+				for field in *root.elements
+					li ->
+						if field.key
+							a href: "#" .. document\generateAnchor(field),
+								field.key.value
+			elseif root.type == "class"
+				if #root.constructors > 0
+					li ->
+						p class: "menu-label", "Constructors"
+						ul ->
+							for field in *root.constructors
+								li ->
+									a href: "#" .. document\generateAnchor(field), ->
+										p text field.name
+
+										p class: "content", ->
+											code -> drawValue(field.value, noLinks: true)
+				if #root.instanceAttributes > 0
+					li ->
+						p class: "menu-label", "Instance"
+						ul ->
+							for field in *root.instanceAttributes
+								li ->
+									a href: "#" .. document\generateAnchor(field), ->
+										p text field.name
+
+										p class: "content", ->
+											code -> drawValue(field.value, noLinks: true)
+				if #root.attributes > 0
+					li ->
+						p class: "menu-label", "Class"
+						ul ->
+							for field in *root.attributes
+								li ->
+									a href: "#" .. document\generateAnchor(field), ->
+										p text field.name
+
+										p class: "content", ->
+											code -> drawValue(field.value, noLinks: true)
+
+drawIndex = ->
+	div class: "section", ->
+		categories = {
+			{
+				name: "Modules"
+			}
+			{
+				name: "Classes"
+				type: "class"
+			}
+			{
+				name: "Guides"
+				type: "guides"
+			}
+		}
+
+		for category in *categories
+			h3 class: "title is-3", category.name
+
+			for doc in *project.documents
+				if doc == document
+					continue
+
+				if category.type == "guides"
+					if doc.docTree
+						continue
+				elseif category.type
+					if not doc.docTree
+						continue
+
+					if doc.docTree.type != category.type
+						continue
+				else
+					if not doc.docTree
+						continue
+
+					if doc.docTree.type == "class"
+						continue
+
+				div class: "card hero is-light", ->
+					div class: "card-header", ->
+						h3 class: "card-header-title", ->
+							a {
+								class: "title is-3 has-text-dark"
+								href: document.root .. "/" .. doc.filename\gsub("%.[^.]*$", "") .. project.outputExtension
+							}, ->
+								if doc.docTree
+									text doc.docTree.name
+								else
+									text doc.title
+
+						if category.type == "class"
+							a {
+								class: "card-header-icon button is-medium is-success"
+								href: document\linkTo(doc) .. "#--constructors"
+							}, "Constructors"
+							a {
+								class: "card-header-icon button is-medium is-danger"
+								href: document\linkTo(doc) .. "#--intanceAttributes"
+							}, "Instance"
+							a {
+								class: "card-header-icon button is-medium is-info"
+								href: document\linkTo(doc) .. "#--attributes"
+							}, "Class"
+						elseif not category.type
+							a {
+								class: "card-header-icon button is-medium is-info"
+								href: document\linkTo(doc) .. "#--fields"
+							}, "Fields"
+				br!
+
 raw "<?xml version='1.0' encoding='utf-8'?>\n"
 raw "<?xml-stylesheet href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css'?>\n"
+raw "<?xml-stylesheet href='#{document.root}/bulma.css'?>\n"
 -- Complected doctype needed for those weird deprecated HTML entities.
 raw "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
 html xmlns: "http://www.w3.org/1999/xhtml", ->
 	head ->
 		title "#{document.title} - #{project.title}"
 		style [[
+			body {
+				font-size: 14pt;
+			}
+
 			*.attribute, *.argument, *.return-value, *.prototype, table.arguments, table.return-values, .title .arguments {
 				font-family: 'Ubuntu Mono', 'Monospace';
 				font-weight: normal;
@@ -278,228 +402,101 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 
 							a class: "navbar-item", :href, document.title
 
-		div class: "columns", ->
-			div class: "column is-one-quarter", ->
-				section class: "section", ->
-					unless document.docTree
-						return
 
-					nav class: "menu", ->
-						p class: "title is-5", "Table of Contents"
-						ul class: "menu-list", ->
-							-- FIXME: Sort by directory? =/
-							root = document.docTree
+		if document.generateIndex
+			section class: "section", ->
+				div class: "container", ->
+					drawIndex!
+		else
+			div class: "columns", ->
+				div class: "column is-one-quarter", ->
+					section class: "section", ->
+						unless document.docTree
+							return
 
-							if root.type == "table"
-								for field in *root.elements
-									li ->
-										if field.key
-											a href: "#" .. document\generateAnchor(field),
-												field.key.value
-							elseif root.type == "class"
-								if #root.constructors > 0
-									li ->
-										p class: "menu-label", "Constructors"
-										ul ->
-											for field in *root.constructors
-												li ->
-													a href: "#" .. document\generateAnchor(field), ->
-														p text field.name
+						drawTOC!
 
-														p class: "content", ->
-															code -> drawValue(field.value, noLinks: true)
-								if #root.instanceAttributes > 0
-									li ->
-										p class: "menu-label", "Instance"
-										ul ->
-											for field in *root.instanceAttributes
-												li ->
-													a href: "#" .. document\generateAnchor(field), ->
-														p text field.name
+				div class: "column is-three-quarters", ->
+					div class: "section", ->
+						h1 class: "title is-1", ->
+							if document.docTree
+								switch document.docTree.type
+									when "class"
+										raw "Class <code>"
+									else
+										raw "Module <code>"
 
-														p class: "content", ->
-															code -> drawValue(field.value, noLinks: true)
-								if #root.attributes > 0
-									li ->
-										p class: "menu-label", "Class"
-										ul ->
-											for field in *root.attributes
-												li ->
-													a href: "#" .. document\generateAnchor(field), ->
-														p text field.name
+							raw document.title
 
-														p class: "content", ->
-															code -> drawValue(field.value, noLinks: true)
-
-			div class: "column is-three-quarters", ->
-				div class: "section", ->
-					h1 class: "title is-1", ->
-						if document.docTree
-							switch document.docTree.type
-								when "class"
-									raw "Class <code>"
-								else
-									raw "Module <code>"
-
-						raw document.title
+							if document.docTree
+								raw "</code>"
 
 						if document.docTree
-							raw "</code>"
+							h2 class: "subtitle is-3 module-type", ->
+								text document.filename
+
+						if document.index
+							div class: "content", ->
+								raw document.index
+
+						if document.body
+							div class: "content", ->
+								raw document.body
 
 					if document.docTree
-						h2 class: "subtitle is-3 module-type", ->
-							text document.filename
+						root = document.docTree
 
-					if document.index
-						div class: "content", ->
-							raw document.index
-
-					if document.body
-						div class: "content", ->
-							raw document.body
-
-				if document.generateIndex
-					div class: "section", ->
 						categories = {
 							{
-								name: "Modules"
+								name: "Constructors"
+								key: "constructors"
 							}
 							{
-								name: "Classes"
-								type: "class"
+								name: "Instance"
+								key: "instanceAttributes"
 							}
 							{
-								name: "Guides"
-								type: "guides"
+								name: "Class"
+								key: "attributes"
 							}
 						}
 
-						for category in *categories
-							h3 class: "title is-3", category.name
+						div class: "section content", ->
+							if root.comment
+								raw root.comment
 
-							for doc in *project.documents
-								if doc == document
+							div class: "import", ->
+								h5 class: "title is-5", "Import:"
+								pre ->
+									shortName = document.title\gsub('^.*%.', '')
+									if root.type == "class"
+										shortName = shortName\gsub '^.', (s) -> s\upper!
+
+									text "#{root.name\gsub "^.*%.", ""} = require '#{document.filename\gsub("%.[^.]*$", "")\gsub("/", ".")}'"
+
+						if root.type == "class"
+							for category in *categories
+								if #root[category.key] == 0
 									continue
 
-								if category.type == "guides"
-									if doc.docTree
-										continue
-								elseif category.type
-									if not doc.docTree
-										continue
+								div class: "section", ->
+									h3 class: "title is-3", id: "--" .. category.key, category.name
 
-									if doc.docTree.type != category.type
-										continue
-								else
-									if not doc.docTree
-										continue
-
-									if doc.docTree.type == "class"
-										continue
-
-								div class: "card hero is-light", ->
-									div class: "card-header", ->
-										h3 class: "card-header-title", ->
-											a {
-												class: "title is-3 has-text-dark"
-												href: document.root .. "/" .. doc.filename\gsub("%.[^.]*$", "") .. project.outputExtension
-											}, ->
-												if doc.docTree
-													text doc.docTree.name
-												else
-													text doc.title
-
-										if category.type == "class"
-											a {
-												class: "card-header-icon button is-medium is-success"
-												href: document\linkTo(doc) .. "#--constructors"
-											}, "Constructors"
-											a {
-												class: "card-header-icon button is-medium is-danger"
-												href: document\linkTo(doc) .. "#--intanceAttributes"
-											}, "Instance"
-											a {
-												class: "card-header-icon button is-medium is-info"
-												href: document\linkTo(doc) .. "#--attributes"
-											}, "Class"
-										elseif not category.type
-											a {
-												class: "card-header-icon button is-medium is-info"
-												href: document\linkTo(doc) .. "#--fields"
-											}, "Fields"
-								br!
-
-	--					for category in *categories
-	--						h3 class: "title is-3", category.name
-	--
-	--						for doc in *project.documents
-	--							if doc == document
-	--								continue
-	--
-	--							if doc.filename\sub(1, document.filename\len!) == document.filename
-	--								if doc.docTree
-	--									for thing in *(doc.docTree[category.key] or {})
-	--										div class: "card", ->
-	--											div class: "card-header", ->
-	--												div class: "card-header-title", ->
-	--													h3 class: "title is-3",
-	--														doc.title .. "." .. (thing.name or "???")
-	--										br!
-
-				if document.docTree
-					root = document.docTree
-
-					categories = {
-						{
-							name: "Constructors"
-							key: "constructors"
-						}
-						{
-							name: "Instance"
-							key: "instanceAttributes"
-						}
-						{
-							name: "Class"
-							key: "attributes"
-						}
-					}
-
-					div class: "section content", ->
-						if root.comment
-							raw root.comment
-
-						div class: "import", ->
-							h5 class: "title is-5", "Import:"
-							pre ->
-								shortName = document.title\gsub('^.*%.', '')
-								if root.type == "class"
-									shortName = shortName\gsub '^.', (s) -> s\upper!
-
-								text "#{root.name\gsub "^.*%.", ""} = require '#{document.filename\gsub("%.[^.]*$", "")\gsub("/", ".")}'"
-
-					if root.type == "class"
-						for category in *categories
-							if #root[category.key] == 0
-								continue
-
-							div class: "section", ->
-								h3 class: "title is-3", id: "--" .. category.key, category.name
-
-								for field in *root[category.key]
+									for field in *root[category.key]
+										br!
+										drawCard field, root, category
+						elseif root.type == "table"
+							div class: "section", id: "--fields", ->
+								for field in *root.elements
 									br!
-									drawCard field, root, category
-					elseif root.type == "table"
-						div class: "section", id: "--fields", ->
-							for field in *root.elements
-								br!
-								drawCard field, root, {
-									key: "class"
-								}
-					else
-						pre ->
-							text "Unimplemented. :(\n"
-							text "Report an issue on Github providing your source file.\n"
-							text "And this: #{root.type}"
+									drawCard field, root, {
+										key: "class"
+									}
+						else
+							pre ->
+								text "Unimplemented. :(\n"
+								text "Report an issue on Github providing your source file.\n"
+								text "And this: #{root.type}"
 
 		footer class: "", ->
 			div class: "navbar", id: "footerMenu", ->
@@ -507,7 +504,7 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 					div class: "navbar-brand", ->
 						a class: "navbar-item", ->
 							div class: "tags has-addons", ->
-								div class: "tag is-light", "lunradoc"
+								div class: "tag is-light", "hestia"
 								div class: "tag is-dark",  "#{project.__class.LUNRADOC_VERSION}"
 
 						a class: "navbar-item", ->
@@ -515,7 +512,7 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 								div class: "tag is-light", "moonscript"
 								div class: "tag is-dark",  "#{require("moonscript.version").version}"
 
-						if project.title\lower! != "lunradoc"
+						if project.title\lower! != "hestia"
 							a class: "navbar-item", ->
 								div class: "tags has-addons", ->
 									div class: "tag is-light", "#{project.title}"

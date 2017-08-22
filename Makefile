@@ -1,4 +1,4 @@
-PACKAGE = 'lunradoc'
+PACKAGE = 'hestia'
 VERSION = '0.5.0'
 
 PREFIX := /usr/local
@@ -17,112 +17,112 @@ LDFLAGS :=
 
 Q := @
 
-all: lunradoc.moon lunradoc/doctree.moon lunradoc/document.moon lunradoc/lapis/html.moon lunradoc/lapis/util/functions.moon lunradoc/project.moon lunradoc/template.moon lunradoc/templates/bulma.moon
+all: hestia.moon hestia/doctree.moon hestia/document.moon hestia/lapis/html.moon hestia/lapis/util/functions.moon hestia/project.moon hestia/template.moon hestia/templates/bulma.moon
 	@:
 
-lunradoc.moon:
+hestia.moon:
 
-lunradoc.moon.install: lunradoc.moon
-	@echo '[01;31m  IN >    [01;37m$(BINDIR)/lunradoc[00m'
+hestia.moon.install: hestia.moon
+	@echo '[01;31m  IN >    [01;37m$(BINDIR)/hestia[00m'
 	$(Q)mkdir -p '$(DESTDIR)$(BINDIR)'
-	$(Q)install -m0755 lunradoc.moon $(DESTDIR)$(BINDIR)/lunradoc
+	$(Q)install -m0755 hestia.moon $(DESTDIR)$(BINDIR)/hestia
 
-lunradoc.moon.clean:
+hestia.moon.clean:
 
-lunradoc.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(BINDIR)/lunradoc[00m'
-	$(Q)rm -f '$(DESTDIR)$(BINDIR)/lunradoc'
+hestia.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(BINDIR)/hestia[00m'
+	$(Q)rm -f '$(DESTDIR)$(BINDIR)/hestia'
 
-lunradoc/doctree.moon:
+hestia/doctree.moon:
 
-lunradoc/doctree.moon.install: lunradoc/doctree.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/doctree.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
-	$(Q)install -m0755 lunradoc/doctree.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/doctree.moon
+hestia/doctree.moon.install: hestia/doctree.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/hestia/doctree.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/hestia'
+	$(Q)install -m0755 hestia/doctree.moon $(DESTDIR)$(LUA_SHAREDIR)/hestia/doctree.moon
 
-lunradoc/doctree.moon.clean:
+hestia/doctree.moon.clean:
 
-lunradoc/doctree.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/doctree.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/doctree.moon'
+hestia/doctree.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/hestia/doctree.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/hestia/doctree.moon'
 
-lunradoc/document.moon:
+hestia/document.moon:
 
-lunradoc/document.moon.install: lunradoc/document.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/document.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
-	$(Q)install -m0755 lunradoc/document.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/document.moon
+hestia/document.moon.install: hestia/document.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/hestia/document.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/hestia'
+	$(Q)install -m0755 hestia/document.moon $(DESTDIR)$(LUA_SHAREDIR)/hestia/document.moon
 
-lunradoc/document.moon.clean:
+hestia/document.moon.clean:
 
-lunradoc/document.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/document.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/document.moon'
+hestia/document.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/hestia/document.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/hestia/document.moon'
 
-lunradoc/lapis/html.moon:
+hestia/lapis/html.moon:
 
-lunradoc/lapis/html.moon.install: lunradoc/lapis/html.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/html.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis'
-	$(Q)install -m0755 lunradoc/lapis/html.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/html.moon
+hestia/lapis/html.moon.install: hestia/lapis/html.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/hestia/lapis/html.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/hestia/lapis'
+	$(Q)install -m0755 hestia/lapis/html.moon $(DESTDIR)$(LUA_SHAREDIR)/hestia/lapis/html.moon
 
-lunradoc/lapis/html.moon.clean:
+hestia/lapis/html.moon.clean:
 
-lunradoc/lapis/html.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/html.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/html.moon'
+hestia/lapis/html.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/hestia/lapis/html.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/hestia/lapis/html.moon'
 
-lunradoc/lapis/util/functions.moon:
+hestia/lapis/util/functions.moon:
 
-lunradoc/lapis/util/functions.moon.install: lunradoc/lapis/util/functions.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/util'
-	$(Q)install -m0755 lunradoc/lapis/util/functions.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon
+hestia/lapis/util/functions.moon.install: hestia/lapis/util/functions.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/hestia/lapis/util/functions.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/hestia/lapis/util'
+	$(Q)install -m0755 hestia/lapis/util/functions.moon $(DESTDIR)$(LUA_SHAREDIR)/hestia/lapis/util/functions.moon
 
-lunradoc/lapis/util/functions.moon.clean:
+hestia/lapis/util/functions.moon.clean:
 
-lunradoc/lapis/util/functions.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/lapis/util/functions.moon'
+hestia/lapis/util/functions.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/hestia/lapis/util/functions.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/hestia/lapis/util/functions.moon'
 
-lunradoc/project.moon:
+hestia/project.moon:
 
-lunradoc/project.moon.install: lunradoc/project.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/project.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
-	$(Q)install -m0755 lunradoc/project.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/project.moon
+hestia/project.moon.install: hestia/project.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/hestia/project.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/hestia'
+	$(Q)install -m0755 hestia/project.moon $(DESTDIR)$(LUA_SHAREDIR)/hestia/project.moon
 
-lunradoc/project.moon.clean:
+hestia/project.moon.clean:
 
-lunradoc/project.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/project.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/project.moon'
+hestia/project.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/hestia/project.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/hestia/project.moon'
 
-lunradoc/template.moon:
+hestia/template.moon:
 
-lunradoc/template.moon.install: lunradoc/template.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/template.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc'
-	$(Q)install -m0755 lunradoc/template.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/template.moon
+hestia/template.moon.install: hestia/template.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/hestia/template.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/hestia'
+	$(Q)install -m0755 hestia/template.moon $(DESTDIR)$(LUA_SHAREDIR)/hestia/template.moon
 
-lunradoc/template.moon.clean:
+hestia/template.moon.clean:
 
-lunradoc/template.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/template.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/template.moon'
+hestia/template.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/hestia/template.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/hestia/template.moon'
 
-lunradoc/templates/bulma.moon:
+hestia/templates/bulma.moon:
 
-lunradoc/templates/bulma.moon.install: lunradoc/templates/bulma.moon
-	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon[00m'
-	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/templates'
-	$(Q)install -m0755 lunradoc/templates/bulma.moon $(DESTDIR)$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon
+hestia/templates/bulma.moon.install: hestia/templates/bulma.moon
+	@echo '[01;31m  IN >    [01;37m$(LUA_SHAREDIR)/hestia/templates/bulma.moon[00m'
+	$(Q)mkdir -p '$(DESTDIR)$(LUA_SHAREDIR)/hestia/templates'
+	$(Q)install -m0755 hestia/templates/bulma.moon $(DESTDIR)$(LUA_SHAREDIR)/hestia/templates/bulma.moon
 
-lunradoc/templates/bulma.moon.clean:
+hestia/templates/bulma.moon.clean:
 
-lunradoc/templates/bulma.moon.uninstall:
-	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon[00m'
-	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/lunradoc/templates/bulma.moon'
+hestia/templates/bulma.moon.uninstall:
+	@echo '[01;37m  RM >    [01;37m$(LUA_SHAREDIR)/hestia/templates/bulma.moon[00m'
+	$(Q)rm -f '$(DESTDIR)$(LUA_SHAREDIR)/hestia/templates/bulma.moon'
 
 $(DESTDIR)$(PREFIX):
 	@echo '[01;35m  DIR >   [01;37m$(PREFIX)[00m'
@@ -139,12 +139,12 @@ $(DESTDIR)$(SHAREDIR):
 $(DESTDIR)$(INCLUDEDIR):
 	@echo '[01;35m  DIR >   [01;37m$(INCLUDEDIR)[00m'
 	$(Q)mkdir -p $(DESTDIR)$(INCLUDEDIR)
-install: subdirs.install lunradoc.moon.install lunradoc/doctree.moon.install lunradoc/document.moon.install lunradoc/lapis/html.moon.install lunradoc/lapis/util/functions.moon.install lunradoc/project.moon.install lunradoc/template.moon.install lunradoc/templates/bulma.moon.install
+install: subdirs.install hestia.moon.install hestia/doctree.moon.install hestia/document.moon.install hestia/lapis/html.moon.install hestia/lapis/util/functions.moon.install hestia/project.moon.install hestia/template.moon.install hestia/templates/bulma.moon.install
 	@:
 
 subdirs.install:
 
-uninstall: subdirs.uninstall lunradoc.moon.uninstall lunradoc/doctree.moon.uninstall lunradoc/document.moon.uninstall lunradoc/lapis/html.moon.uninstall lunradoc/lapis/util/functions.moon.uninstall lunradoc/project.moon.uninstall lunradoc/template.moon.uninstall lunradoc/templates/bulma.moon.uninstall
+uninstall: subdirs.uninstall hestia.moon.uninstall hestia/doctree.moon.uninstall hestia/document.moon.uninstall hestia/lapis/html.moon.uninstall hestia/lapis/util/functions.moon.uninstall hestia/project.moon.uninstall hestia/template.moon.uninstall hestia/templates/bulma.moon.uninstall
 	@:
 
 subdirs.uninstall:
@@ -154,7 +154,7 @@ test: all subdirs subdirs.test
 
 subdirs.test:
 
-clean: lunradoc.moon.clean lunradoc/doctree.moon.clean lunradoc/document.moon.clean lunradoc/lapis/html.moon.clean lunradoc/lapis/util/functions.moon.clean lunradoc/project.moon.clean lunradoc/template.moon.clean lunradoc/templates/bulma.moon.clean
+clean: hestia.moon.clean hestia/doctree.moon.clean hestia/document.moon.clean hestia/lapis/html.moon.clean hestia/lapis/util/functions.moon.clean hestia/project.moon.clean hestia/template.moon.clean hestia/templates/bulma.moon.clean
 
 distclean: clean
 
@@ -169,17 +169,17 @@ dist-gz: $(PACKAGE)-$(VERSION).tar.gz
 $(PACKAGE)-$(VERSION).tar.gz: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.gz[00m'
 	$(Q)tar czf $(PACKAGE)-$(VERSION).tar.gz \
-		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/project.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/template.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/templates/bulma.moon \
+		$(PACKAGE)-$(VERSION)/hestia/doctree.moon \
+		$(PACKAGE)-$(VERSION)/hestia/document.moon \
+		$(PACKAGE)-$(VERSION)/hestia/lapis/html.moon \
+		$(PACKAGE)-$(VERSION)/hestia/lapis/util/functions.moon \
+		$(PACKAGE)-$(VERSION)/hestia.moon \
+		$(PACKAGE)-$(VERSION)/hestia/project.moon \
+		$(PACKAGE)-$(VERSION)/hestia/template.moon \
+		$(PACKAGE)-$(VERSION)/hestia/templates/bulma.moon \
 		$(PACKAGE)-$(VERSION)/project.zsh \
 		$(PACKAGE)-$(VERSION)/Makefile \
-		$(PACKAGE)-$(VERSION)/lunradoc.cfg \
+		$(PACKAGE)-$(VERSION)/hestia.cfg \
 		$(PACKAGE)-$(VERSION)/LICENSE.md \
 		$(PACKAGE)-$(VERSION)/README.md
 
@@ -187,17 +187,17 @@ dist-xz: $(PACKAGE)-$(VERSION).tar.xz
 $(PACKAGE)-$(VERSION).tar.xz: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.xz[00m'
 	$(Q)tar cJf $(PACKAGE)-$(VERSION).tar.xz \
-		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/project.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/template.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/templates/bulma.moon \
+		$(PACKAGE)-$(VERSION)/hestia/doctree.moon \
+		$(PACKAGE)-$(VERSION)/hestia/document.moon \
+		$(PACKAGE)-$(VERSION)/hestia/lapis/html.moon \
+		$(PACKAGE)-$(VERSION)/hestia/lapis/util/functions.moon \
+		$(PACKAGE)-$(VERSION)/hestia.moon \
+		$(PACKAGE)-$(VERSION)/hestia/project.moon \
+		$(PACKAGE)-$(VERSION)/hestia/template.moon \
+		$(PACKAGE)-$(VERSION)/hestia/templates/bulma.moon \
 		$(PACKAGE)-$(VERSION)/project.zsh \
 		$(PACKAGE)-$(VERSION)/Makefile \
-		$(PACKAGE)-$(VERSION)/lunradoc.cfg \
+		$(PACKAGE)-$(VERSION)/hestia.cfg \
 		$(PACKAGE)-$(VERSION)/LICENSE.md \
 		$(PACKAGE)-$(VERSION)/README.md
 
@@ -205,22 +205,22 @@ dist-bz2: $(PACKAGE)-$(VERSION).tar.bz2
 $(PACKAGE)-$(VERSION).tar.bz2: distdir
 	@echo '[01;33m  TAR >   [01;37m$(PACKAGE)-$(VERSION).tar.bz2[00m'
 	$(Q)tar cjf $(PACKAGE)-$(VERSION).tar.bz2 \
-		$(PACKAGE)-$(VERSION)/lunradoc/doctree.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/document.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/lapis/html.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/lapis/util/functions.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/project.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/template.moon \
-		$(PACKAGE)-$(VERSION)/lunradoc/templates/bulma.moon \
+		$(PACKAGE)-$(VERSION)/hestia/doctree.moon \
+		$(PACKAGE)-$(VERSION)/hestia/document.moon \
+		$(PACKAGE)-$(VERSION)/hestia/lapis/html.moon \
+		$(PACKAGE)-$(VERSION)/hestia/lapis/util/functions.moon \
+		$(PACKAGE)-$(VERSION)/hestia.moon \
+		$(PACKAGE)-$(VERSION)/hestia/project.moon \
+		$(PACKAGE)-$(VERSION)/hestia/template.moon \
+		$(PACKAGE)-$(VERSION)/hestia/templates/bulma.moon \
 		$(PACKAGE)-$(VERSION)/project.zsh \
 		$(PACKAGE)-$(VERSION)/Makefile \
-		$(PACKAGE)-$(VERSION)/lunradoc.cfg \
+		$(PACKAGE)-$(VERSION)/hestia.cfg \
 		$(PACKAGE)-$(VERSION)/LICENSE.md \
 		$(PACKAGE)-$(VERSION)/README.md
 
 help:
-	@echo '[01;37m :: lunradoc-0.5.0[00m'
+	@echo '[01;37m :: hestia-0.5.0[00m'
 	@echo ''
 	@echo '[01;37mGeneric targets:[00m'
 	@echo '[00m    - [01;32mhelp          [37m Prints this help message.[00m'
@@ -244,7 +244,7 @@ help:
 	@echo '    - [01;34mLUA_SHAREDIR  [37m ${LUA_SHAREDIR}[00m'
 	@echo ''
 	@echo '[01;37mProject targets: [00m'
-	@echo '    - [01;33mlunradoc.moon [37m script[00m'
+	@echo '    - [01;33mhestia.moon   [37m script[00m'
 	@echo ''
 	@echo '[01;37mMakefile options:[00m'
 	@echo '    - gnu:           false'

@@ -2,14 +2,14 @@
 
 argparse = require "argparse"
 
-Project = require 'lunradoc.project'
+Project = require 'hestia.project'
 
 ohshit = (reason) ->
 	io.stderr\write "ERROR: #{reason}\n"
 	os.exit(1)
 
 
-argParser = with argparse "lunradoc", "Experimental documentation generator, mostly for Moonscript."
+argParser = with argparse "hestia", "Experimental documentation generator, mostly for Moonscript."
 	with \argument "directory"
 		\args "?"
 
@@ -19,7 +19,7 @@ argParser = with argparse "lunradoc", "Experimental documentation generator, mos
 
 args = argParser\parse!
 
-project, reason = Project.fromConfiguration (args.directory or ".") .. "/lunradoc.cfg"
+project, reason = Project.fromConfiguration (args.directory or ".") .. "/hestia.cfg"
 
 unless project
 	ohshit "Could not load configuration: #{reason}"

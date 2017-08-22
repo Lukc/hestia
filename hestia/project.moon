@@ -5,8 +5,8 @@ lfs = require "lfs"
 
 moonscript = require "moonscript"
 
-Document = require "lunradoc.document"
-Template = require "lunradoc.template"
+Document = require "hestia.document"
+Template = require "hestia.template"
 
 findMoon = make_loader "moon"
 findCss = make_loader "css"
@@ -21,7 +21,7 @@ class
 	---
 	-- @constructor
 	-- @return Project | nil, string
-	@fromConfiguration: (filepath = "lunradoc.cfg") ->
+	@fromConfiguration: (filepath = "hestia.cfg") ->
 		file, reason = io.open filepath, "r"
 
 		unless file
@@ -117,7 +117,7 @@ class
 			.copy = (@files or {}).copy or {}
 
 	setDefaultValues: =>
-		@template or= findMoon "lunradoc.templates.bulma"
+		@template or= findMoon "hestia.templates.bulma"
 		@outputExtension or= ".xhtml"
 
 		@discountFlags or= {
