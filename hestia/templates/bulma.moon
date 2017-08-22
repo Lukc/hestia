@@ -197,8 +197,8 @@ drawCard = (field, root, category) ->
 
 				drawReturnValues value
 
-			if value.see and #value.see > 0
-				drawSeeAlso value
+		if value.see and #value.see > 0
+			drawSeeAlso value
 
 			for type in *{"info", "warning", "issue"}
 				if value[type] and #value[type] > 0
@@ -226,8 +226,11 @@ drawTOC = ->
 				for field in *root.elements
 					li ->
 						if field.key
-							a href: "#" .. document\generateAnchor(field),
-								field.key.value
+							a href: "#" .. document\generateAnchor(field), ->
+								p field.key.value
+
+								p class: "content", ->
+									code -> drawValue(field.value, noLinks: true)
 			elseif root.type == "class"
 				if #root.constructors > 0
 					li ->
@@ -468,8 +471,10 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 							if root.comment
 								raw root.comment
 
-							if root.see and #root.see > 0
-								drawSeealso root
+
+						if root.see and #root.see > 0
+							section class: "section content", ->
+								drawSeeAlso root
 
 						if root.type == "class"
 							for category in *categories
