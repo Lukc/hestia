@@ -164,7 +164,7 @@ drawValue = (value, opt = {}) ->
 			span class: "number", ->
 				text value.value
 
-drawCard = (field, root, category) ->
+drawCard = (field, root, section) ->
 	key = field.key
 	value = field.value
 
@@ -175,7 +175,7 @@ drawCard = (field, root, category) ->
 				if key
 					text key.value
 
-				if category.key == "constructors" or category.key == "attributes"
+				if section.title == "Constructors" or not section.title
 					text root.name
 					if field.name
 						text "."
@@ -215,6 +215,60 @@ drawCard = (field, root, category) ->
 							div class: "tag #{cssClass} is-medium", tostring type\gsub "^.", (s) -> s\upper!
 							div class: "tag is-dark is-medium", message
 
+getSections = (root) ->
+	if root.type == "table"
+		{
+			{
+				id: "fields"
+				elements: root.elements
+				drawTOCElement: (element) ->
+					if element.key
+						a href: "#" .. document\generateAnchor(element), ->
+							p element.key.value
+
+							p class: "content", ->
+								code -> drawValue(element.value, noLinks: true)
+			}
+		}
+	elseif root.type == "class"
+		{
+			{
+				title: "Constructors"
+				id: "constructors"
+				elements: root.constructors
+				drawTOCElement: (element) ->
+					a href: "#" .. document\generateAnchor(element), ->
+						p text element.name
+
+						p class: "content", ->
+							code -> drawValue(element.value, noLinks: true)
+			}
+			{
+				id: "instanceAttributes"
+				title: "Instance"
+				elements: root.instanceAttributes
+				drawTOCElement: (element) ->
+					a href: "#" .. document\generateAnchor(element), ->
+						p text element.name
+
+						p class: "content", ->
+							code -> drawValue(element.value, noLinks: true)
+			}
+			{
+				id: "attributes"
+				title: "Class"
+				elements: root.attributes
+				drawTOCElement: (element) ->
+					a href: "#" .. document\generateAnchor(element), ->
+						p text element.name
+
+						p class: "content", ->
+							code -> drawValue(element.value, noLinks: true)
+			}
+		}
+	else
+		{}
+
 drawTOC = ->
 	nav class: "menu", ->
 		p class: "title is-5", "Table of Contents"
@@ -238,54 +292,7 @@ drawTOC = ->
 			-- FIXME: Sort by directory? =/
 			root = document.docTree
 
-			sections = {}
-
-			if root.type == "table"
-				sections = {
-					{
-						elements: root.elements
-						drawElement: (element) ->
-							if element.key
-								a href: "#" .. document\generateAnchor(element), ->
-									p element.key.value
-
-									p class: "content", ->
-										code -> drawValue(element.value, noLinks: true)
-					}
-				}
-			elseif root.type == "class"
-				sections = {
-					{
-						title: "Constructors"
-						elements: root.constructors
-						drawElement: (element) ->
-							a href: "#" .. document\generateAnchor(element), ->
-								p text element.name
-
-								p class: "content", ->
-									code -> drawValue(element.value, noLinks: true)
-					}
-					{
-						title: "Instance"
-						elements: root.instanceAttributes
-						drawElement: (element) ->
-							a href: "#" .. document\generateAnchor(element), ->
-								p text element.name
-
-								p class: "content", ->
-									code -> drawValue(element.value, noLinks: true)
-					}
-					{
-						title: "Class"
-						elements: root.attributes
-						drawElement: (element) ->
-							a href: "#" .. document\generateAnchor(element), ->
-								p text element.name
-
-								p class: "content", ->
-									code -> drawValue(element.value, noLinks: true)
-					}
-				}
+			sections = getSections root
 
 			for section in *sections
 				if #section.elements == 0
@@ -297,7 +304,7 @@ drawTOC = ->
 
 					ul ->
 						for element in *section.elements
-							section.drawElement element
+							section.drawTOCElement element
 
 drawIndex = ->
 	div class: "section", ->
@@ -357,7 +364,7 @@ drawIndex = ->
 							}, "Constructors"
 							a {
 								class: "card-header-icon button is-medium is-danger"
-								href: document\linkTo(doc) .. "#--intanceAttributes"
+								href: document\linkTo(doc) .. "#--instanceAttributes"
 							}, "Instance"
 							a {
 								class: "card-header-icon button is-medium is-info"
@@ -477,48 +484,31 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 					if document.docTree
 						root = document.docTree
 
-						categories = {
-							{
-								name: "Constructors"
-								key: "constructors"
-							}
-							{
-								name: "Instance"
-								key: "instanceAttributes"
-							}
-							{
-								name: "Class"
-								key: "attributes"
-							}
-						}
-
 						div class: "section content", ->
 							if root.comment
 								raw root.comment
 
+						sections = getSections root
 
 						if root.see and #root.see > 0
 							section class: "section content", ->
 								drawSeeAlso root
 
-						if root.type == "class"
-							for category in *categories
-								if #root[category.key] == 0
+						if #sections > 0
+							for section in *sections
+								if #section.elements == 0
 									continue
 
-								div class: "section", ->
-									h3 class: "title is-3", id: "--" .. category.key, category.name
+								element "section", class: "section", ->
+									if section.title
+										h3 class: "title is-3", id: "--" .. section.id,
+											section.title
 
-									for field in *root[category.key]
-										br!
-										drawCard field, root, category
-						elseif root.type == "table"
-							div class: "section", id: "--fields", ->
-								for field in *root.elements
-									br!
-									drawCard field, root, {
-										key: "class"
-									}
+									for element in *section.elements
+										unless element == section.elements[1]
+											br!
+
+										drawCard element, root, section
 						else
 							pre ->
 								text "Unimplemented. :(\n"
@@ -531,7 +521,7 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 					div class: "navbar-brand", ->
 						a class: "navbar-item", ->
 							div class: "tags has-addons", ->
-								div class: "tag is-light", "hestia"
+								div class: "tag is-light", "Hestia Documentation"
 								div class: "tag is-dark",  "#{project.__class.LUNRADOC_VERSION}"
 
 						a class: "navbar-item", ->
@@ -539,7 +529,7 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 								div class: "tag is-light", "moonscript"
 								div class: "tag is-dark",  "#{require("moonscript.version").version}"
 
-						if project.title\lower! != "hestia"
+						if project.title\lower! != "hestia documentation"
 							a class: "navbar-item", ->
 								div class: "tags has-addons", ->
 									div class: "tag is-light", "#{project.title}"
