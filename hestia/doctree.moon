@@ -250,7 +250,7 @@ getValue = (tree, content) ->
 				.comment = parseTags self, .comment
 
 			if .comment
-				result, err = discount.compile(.comment)
+				result, err = discount.compile(.comment, "fencedcode", "dlextra")
 
 				if result
 					.comment = result.body
