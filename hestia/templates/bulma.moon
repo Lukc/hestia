@@ -335,13 +335,16 @@ drawIndex = ->
 				br!
 
 raw "<?xml version='1.0' encoding='utf-8'?>\n"
-raw "<?xml-stylesheet href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.1/css/bulma.min.css'?>\n"
 raw "<?xml-stylesheet href='#{document.root}/bulma.css'?>\n"
+raw "<?xml-stylesheet href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css'?>\n"
 -- Complected doctype needed for those weird deprecated HTML entities.
 raw "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
 html xmlns: "http://www.w3.org/1999/xhtml", ->
 	head ->
 		title "#{document.title} - #{project.title}"
+		script src: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"
+		script src: "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/languages/moonscript.min.js"
+		script "hljs.initHighlightingOnLoad();"
 		style [[
 			body {
 				font-size: 14pt;
@@ -465,14 +468,8 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 							if root.comment
 								raw root.comment
 
-							div class: "import", ->
-								h5 class: "title is-5", "Import:"
-								pre ->
-									shortName = document.title\gsub('^.*%.', '')
-									if root.type == "class"
-										shortName = shortName\gsub '^.', (s) -> s\upper!
-
-									text "#{root.name\gsub "^.*%.", ""} = require '#{document.filename\gsub("%.[^.]*$", "")\gsub("/", ".")}'"
+							if root.see and #root.see > 0
+								drawSeealso root
 
 						if root.type == "class"
 							for category in *categories
