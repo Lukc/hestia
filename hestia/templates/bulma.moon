@@ -171,11 +171,12 @@ drawCard = (field, root, section) ->
 	div class: "card is-spaced", id: document\generateAnchor(field), ->
 		div class: "card-header", ->
 			h4 class: "card-header-title title is-3 prototype", ->
-				if section.title == "Constructors" or not section.title
-					text tostring root.name\gsub ".*%.", ""
+				if section
+					if section.title == "Constructors" or not section.title
+						text tostring root.name\gsub ".*%.", ""
 
-					if (key and key.value) or field.name
-						text "."
+						if (key and key.value) or field.name
+							text "."
 
 				-- FIXME: field.key, value.name ? Same thing, different places. That sucks.
 				if key
@@ -190,7 +191,9 @@ drawCard = (field, root, section) ->
 					drawValue value
 
 		div class: "card-content", ->
-			if value.comment
+			if value.comment and section
+				-- no section == root object.
+				-- Its comment will be displayed at the top of the page.
 				div class: "content", ->
 					raw value.comment
 
@@ -511,6 +514,8 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 											br!
 
 										drawCard element, root, section
+						elseif root.type == "function" or root.type == "method"
+							drawCard {value: root}, root
 						else
 							pre ->
 								text "Unimplemented. :(\n"
