@@ -240,6 +240,10 @@ getValue = (tree, content) ->
 		elseif .type == "chain" or .type == "call"
 			-- Not really documentable as-is. Special cases will be handled later… if need be.
 			.ast = tree
+		elseif .type == "if" or .type == "unless" or .type == "with" or .type == "foreach" or .type == "declare_with_shadows" or .type == "do" or .type == "exp"
+			-- Not doing anything for now, even though some of those
+			-- statements should probably be parsed. Like with.
+			.ast = tree
 		else
 			print "[internal error]: unrecognized type #{.type}"
 
@@ -358,8 +362,12 @@ isClassGen = (value, code) ->
 	unless tree
 		return nil, "could not parse moonscript", reason
 
+	topLevelValues = {}
 	success, value, reason = pcall ->
-		getValue(tree[#tree], string)
+		for i = 1, #tree
+			topLevelValues[i] = getValue(tree[i], string)
+
+		topLevelValues[#tree]
 
 	unless success
 		return nil, value
@@ -367,9 +375,23 @@ isClassGen = (value, code) ->
 	unless value
 		return nil, reason
 
-	t = value.type
+	getTopLevelReference = (value) ->
+		for i = #tree - 1, 1, -1
+			t = topLevelValues[i]
+			if t.type == "assign"
+				if t.reference.value == value.value
+					return t.value
 
-	switch t
+	-- This is a bit of a hack. We shouldn’t be doing this that way at all.
+	if value.type == "reference"
+		value = getTopLevelReference(value) or value
+
+	if value.type == "table"
+		for pair in *value.elements
+			if pair.value.type == "reference"
+				pair.value = getTopLevelReference(pair.value) or pair.value
+
+	switch value.type
 		when "class"
 			parseClass {
 				type: "class"
