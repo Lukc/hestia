@@ -58,6 +58,7 @@ class Document
 	-- @param filename  (string)
 	-- @param file      (file)
 	importMoon: (project, filename, file) =>
+		print "Parsing #{filename}."
 		tree, reason = DocTree file\read "*all"
 
 		if tree.type == "class"
