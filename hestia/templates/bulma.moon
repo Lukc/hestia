@@ -184,7 +184,12 @@ drawValue = (value, opt = {}) ->
 
 			span class: "has-text-grey", "}"
 		when "class"
-			span class: "class has-text-danger", "class"
+			span class: "class has-text-danger", ->
+				text "class"
+
+				if value.name
+					text " "
+					span class: "has-text-info", value.name
 
 drawCard = (field, root, section) ->
 	key = field.key
