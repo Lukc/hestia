@@ -280,6 +280,9 @@ class MoonParser
 					argument =
 						name: argument[1]
 
+				if ast[2][i][2]
+					argument.value = @\getValue ast[2][i][2]
+
 				table.insert arguments, argument
 
 			-- Build by hand because of two possible types.

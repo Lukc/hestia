@@ -113,7 +113,7 @@ drawValue = (value, opt = {}) ->
 										class: "attribute has-text-danger",
 										"@" .. arg.name
 									}
-							else
+							else -- XXX: what the hell
 								span class: "argument", ->
 									span {
 										class: "attribute has-text-danger",
@@ -123,6 +123,10 @@ drawValue = (value, opt = {}) ->
 									a arg.name
 						else
 							span class: "argument has-text-success", arg.name
+
+						if arg.value
+							text " = "
+							drawValue arg.value
 
 					span class: "parens", ") "
 				else
@@ -154,14 +158,20 @@ drawValue = (value, opt = {}) ->
 
 					text " "
 		when "string"
-			text "[["
+			text "\""
 
 			span class: "string has-text-warning", ->
 				text value.value
-			text "]]"
+
+			text "\""
 		when "number"
 			text ""
 			span class: "number", ->
+				text value.value
+		when "reference"
+			if value.value\sub(1, 1) == "@"
+				span class: "attribute has-text-danger", value.value
+			else
 				text value.value
 
 drawCard = (field, root, section) ->
