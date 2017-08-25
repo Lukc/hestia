@@ -287,7 +287,6 @@ drawTOC = ->
 				-- No more than two levels of depth.
 				index = index\gsub "\n   [^\n]*", ""
 
-				print index
 				raw index
 
 		unless document.docTree

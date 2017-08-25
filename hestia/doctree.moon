@@ -170,7 +170,7 @@ class MoonscriptParser
 
 		string\gmatch "(.-)\n"
 
-	parseTags: (self, comment) =>
+	parseTags: (docTree, comment) =>
 		for tagLine in @\getLines comment
 			tagLine = trim tagLine
 
@@ -183,34 +183,34 @@ class MoonscriptParser
 				when "return"
 					returnType, returnDesc = trim(data)\match "^(%([^)]+%))%s*(.*)"
 
-					unless self.returnValues
-						print "warning: trying to add @return to a non-function."
+					unless docTree.returnValues
+						print "warning: trying to add @return to a non-callable."
 						continue
 
 					for rValueSet in (returnType or data)\gmatch "[^|]*"
-						table.insert self.returnValues, {
+						table.insert docTree.returnValues, {
 							description: returnDesc
 						}
 
 						for rValue in rValueSet\gmatch "%w+"
-							table.insert self.returnValues[#self.returnValues],
+							table.insert docTree.returnValues[#docTree.returnValues],
 								rValue
 
-						if #self.returnValues[#self.returnValues] == 0
-							table.remove self.returnValues
+						if #docTree.returnValues[#docTree.returnValues] == 0
+							table.remove docTree.returnValues
 				when "treturn"
 					-- LDoc compatibility. =/
-					@\parseTags self, "@return #{data\gsub "(%S+)%s*(.*)", (s1, s2) -> "(#{s1})"}"
+					@\parseTags docTree, "@return #{data\gsub "(%S+)%s*(.*)", (s1, s2) -> "(#{s1})"}"
 				when "param"
 					argName, argType, argDesc = trim(data)\match "^(%w+)%s*(%([^)]+%))%s*(.*)"
 
-					findArg = (self, name) ->
-						for arg in *(self.arguments or {})
+					findArg = (docTree, name) ->
+						for arg in *(docTree.arguments or {})
 							if arg.name == name
 								return arg
 
 					if argName
-						arg = findArg self, argName
+						arg = findArg docTree, argName
 
 						if argType
 							-- Removing parens.
@@ -225,17 +225,17 @@ class MoonscriptParser
 						arg.description = argDesc
 				when "tparam"
 					-- LDoc compatibility. =/
-					@\parseTags self, "@param #{data\gsub "(%S+)%s+(%S+)%s*(.*)", (s1, s2, s3) -> "#{s2} (#{s1}) #{s3}"}"
+					@\parseTags docTree, "@param #{data\gsub "(%S+)%s+(%S+)%s*(.*)", (s1, s2, s3) -> "#{s2} (#{s1}) #{s3}"}"
 				when "constructor"
-					self.tags or= {}
-					self.tags.constructor = true
+					docTree.tags or= {}
+					docTree.tags.constructor = true
 				when "info", "warning", "issue"
-					self[tag] or= {}
-					table.insert self[tag], data
+					docTree[tag] or= {}
+					table.insert docTree[tag], data
 				when "see"
-					self.see or= {}
+					docTree.see or= {}
 					for reference in data\gmatch "%S+"
-						table.insert self.see, reference
+						table.insert docTree.see, reference
 				else
 					print "warning: unhandled tag detected: #{tag}"
 
@@ -317,14 +317,14 @@ class MoonscriptParser
 				if type(argument[1]) == "table"
 					argument = @\getValue argument[1]
 
-					if argumenttype == "reference"
+					if argument.type == "reference"
 						-- FIXME: Could add a default documentation entry around here.
 						argument = {
 							assignedTo: argument.value\gsub '^@', ''
 							name: argument.value\gsub '^@', ''
 						}
 					else
-						print "??? FIXME", argumenttype
+						print "??? FIXME", argument.type
 						argument =
 							name: argument.value
 				else
@@ -379,7 +379,7 @@ class MoonscriptParser
 
 				if .line
 					if .comment
-						.comment = @\parseTags self, .comment
+						.comment = @\parseTags docTree, .comment
 
 					if .comment
 						result, err = discount.compile(.comment, "toc", "fencedcode", "dlextra")
@@ -392,7 +392,7 @@ class MoonscriptParser
 
 					annotation = @\getAnnotation content, .line
 					if annotation
-						@\parseTags self, annotation
+						@\parseTags docTree, annotation
 
 	parseClass: (Class, classBody) =>
 		Class.name or= classBody.name
@@ -420,7 +420,7 @@ class MoonscriptParser
 					Class.instanceAttributes
 				else
 					Class.attributes
-			elseif key.type == "reference" and key.value\sub(1,1) == "Class."
+			elseif key.type == "reference" and key.value\sub(1,1) == "@"
 				key.value = key.value\sub 2, key.value\len!
 
 				if constructorTag
