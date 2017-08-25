@@ -7,70 +7,19 @@ parse = require "moonscript.parse"
 
 {:pos_to_line, :trim, :get_line} = require 'moonscript.util'
 
-DocTree = class
-	new: (arg) =>
-		for k,v in pairs arg
-			@[k] = v
-
-		@see or= {}
-		@info or= {}
-		@warning or= {}
-		@issue or= {}
-
-	__tostring: =>
-		"<DocTree:#{@type}>"
-
-	@string: (value, quoteType) ->
-		@@ {
-			type: "string"
-			:value, :quoteType
-		}
-
-	@table: (elements) ->
-		@@ {
-			type: "table"
-			:elements
-		}
-
-	@number: (value) ->
-		@@ {
-			type: "number"
-			:value
-		}
-
-	@reference: (value) ->
-		@@ {
-			type: "reference"
-			:value
-		}
-
-	@assignment: (reference, value ) ->
-		@@ {
-			type: "assignment",
-			:reference, :value
-		}
-
-	@class: (name, fields) ->
-		@@ {
-			type: "class"
-			:name, :fields
-		}
+DocTree = require "hestia.doc_tree"
 
 ---
--- Converts a Moonscript AST into… well… something close, but simplified and
--- that includes documentation comments, as well as some other sorts of metadata.
+-- Converts a Moonscript AST into a DocTree.
 --
 -- Takes care of parsing `@tags` and stuff.
---
--- Called a “DocTree” or “Documentation Tree” because the objective was to
--- create a tree of documentable (and possibly documented) objects that was
--- language-independent. Not sure I really did that, but, oh, well…
-class MoonscriptParser
+class MoonParser
 	---
 	-- @return DocTree
 	-- @return (nil, string) Moonscript parsing error or incomplete AST support.
 	-- @param string (string) Moonscript code to parse. Usually the content of a file.
-	@fromMoonscript: (string) ->
+	-- @constructor
+	@fromString: (string) ->
 		self = @@!
 
 		@input = string

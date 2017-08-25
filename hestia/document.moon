@@ -2,7 +2,7 @@
 {:mkdir, :attributes} = require "lfs"
 discount = require "discount"
 
-DocTree = require "hestia.doctree"
+MoonParser = require "hestia.moon_parser"
 
 unpack = unpack or table.unpack
 
@@ -59,7 +59,7 @@ class Document
 	-- @param file      (file)
 	importMoon: (project, filename, file) =>
 		print "Parsing #{filename}."
-		tree, reason = DocTree.fromMoonscript file\read "*all"
+		tree, reason = MoonParser.fromString file\read "*all"
 
 		if tree.type == "class"
 			tree.name or= filename\gsub("%.moon", "")\gsub("^.*/", "")\gsub("^.", (s) -> s\upper!)
