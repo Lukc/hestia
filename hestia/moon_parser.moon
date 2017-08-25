@@ -60,6 +60,9 @@ class MoonParser
 			if t.type == "assignment"
 				if t.reference.value == value.value
 					return t.value
+			elseif t.type == "class"
+				if t.name == value.value
+					return t
 
 	findPreCommentBegin: (code,line) =>
 		if line <= 1
