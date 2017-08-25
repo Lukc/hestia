@@ -155,7 +155,6 @@ class Document
 		self = @@ project, "."
 
 		@outputFilePath = @project.outputDirectory .. "index" .. @project.outputExtension
-		print @outputFilePath
 
 		@title = "Index"
 
