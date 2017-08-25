@@ -264,12 +264,15 @@ drawCard = (field, root, section) ->
 							div class: "tag #{cssClass} is-medium", tostring type\gsub "^.", (s) -> s\upper!
 							div class: "tag is-dark is-medium", message
 
+getElements = (array) ->
+	[e for e in *array when not e.value.hidden]
+
 getSections = (root) ->
 	if root.type == "table"
 		{
 			{
 				id: "fields"
-				elements: root.elements
+				elements: getElements root.elements
 				drawTOCElement: (element) ->
 					if element.key
 						a href: "#" .. document\generateAnchor(element), ->
@@ -284,7 +287,7 @@ getSections = (root) ->
 			{
 				title: "Constructors"
 				id: "constructors"
-				elements: root.constructors
+				elements: getElements root.constructors
 				drawTOCElement: (element) ->
 					a href: "#" .. document\generateAnchor(element), ->
 						p text element.name
@@ -295,7 +298,7 @@ getSections = (root) ->
 			{
 				id: "instanceAttributes"
 				title: "Instance"
-				elements: root.instanceAttributes
+				elements: getElements root.instanceAttributes
 				drawTOCElement: (element) ->
 					a href: "#" .. document\generateAnchor(element), ->
 						p text element.name
@@ -306,7 +309,7 @@ getSections = (root) ->
 			{
 				id: "attributes"
 				title: "Class"
-				elements: root.attributes
+				elements: getElements root.attributes
 				drawTOCElement: (element) ->
 					a href: "#" .. document\generateAnchor(element), ->
 						p text element.name

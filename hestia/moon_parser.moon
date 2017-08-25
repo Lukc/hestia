@@ -115,6 +115,8 @@ class MoonParser
 			tag, data = tagLine\match "^@([a-z][a-zA-Z0-9]*) *([^\n]*)"
 
 			switch tag
+				when "hidden"
+					docTree.hidden = true
 				when "return"
 					returnType, returnDesc = trim(data)\match "^(%([^)]+%))%s*(.*)"
 
