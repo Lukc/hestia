@@ -12,36 +12,48 @@ class DocTree
 	__tostring: =>
 		"<DocTree:#{@type}>"
 
-	@string: (value, quoteType) ->
+	---
+	-- @constructor
+	@string: (value, quoteType = nil) ->
 		@@ {
 			type: "string"
 			:value, :quoteType
 		}
 
+	---
+	-- @constructor
 	@table: (elements) ->
 		@@ {
 			type: "table"
 			:elements
 		}
 
+	---
+	-- @constructor
 	@number: (value) ->
 		@@ {
 			type: "number"
 			:value
 		}
 
+	---
+	-- @constructor
 	@reference: (value) ->
 		@@ {
 			type: "reference"
 			:value
 		}
 
+	---
+	-- @constructor
 	@assignment: (reference, value ) ->
 		@@ {
 			type: "assignment",
 			:reference, :value
 		}
 
+	---
+	-- @constructor
 	@class: (name, fields) ->
 		@@ {
 			type: "class"
