@@ -1,20 +1,20 @@
 
-drawType = (type, opt = {}) ->
-	if type == "string" or type == "boolean" or type == "table" or type == "object" or type == "function"
-		span class: "type has-text-primary", type
-	-- Temporary. At some point, “type” won’t be a string anymore.
-	elseif type == "nil" or type == "true" or type == "false"
-		span class: "type has-text-warning", type
+drawType = (Type, opt = {}) ->
+	if Type == "string" or Type == "boolean" or Type == "table" or Type == "object" or Type == "function"
+		span class: "Type has-text-primary", Type
+	-- Temporary. At some point, “Type” won’t be a string anymore.
+	elseif Type == "nil" or Type == "true" or Type == "false"
+		span class: "Type has-text-warning", Type
 	else
-		href = document\typeReference type
+		href = document\typeReference Type
 
 		if href
 			if opt.noLinks
-				span class: "type has-text-info", :href, type
+				span class: "Type has-text-info", :href, Type
 			else
-				a class: "type has-text-info", :href, type
+				a class: "Type has-text-info", :href, Type
 		else
-			span class: "type has-text-grey", type
+			span class: "Type has-text-grey", Type
 
 drawArgumentsList = (value) ->
 	if #value.arguments > 0

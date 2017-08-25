@@ -52,24 +52,7 @@ class MoonParser
 				if pair.value.type == "reference"
 					pair.value = @\getTopLevelReference(pair.value) or pair.value
 
-		switch value.type
-			when "class"
-				@\parseClass {
-					type: "class"
-				}, value
-			when "chain"
-				chain = value
-
-				classBody = @\isClassGen chain, string
-				if classBody
-					@\parseClass {
-						type: "class"
-					}, classBody
-				else
-					-- Well, good luck with it. =/
-					chain
-			else
-				value
+		value
 
 	getTopLevelReference: (value) =>
 		for i = #@tree - 1, 1, -1
@@ -244,7 +227,7 @@ class MoonParser
 
 			name = ast[2]
 
-			DocTree.class name, fields
+			@\parseClass {type: "class"}, DocTree.class(name, fields)
 		fndef: (ast) =>
 			arguments = {}
 
@@ -291,6 +274,14 @@ class MoonParser
 				type: fndefType
 				:returnValues
 				:arguments
+		chain: (ast) =>
+			classBody = @\isClassGen ast
+
+			if classBody
+				@\parseClass DocTree.class!, classBody
+			else
+				-- Well, good luck with it. =/
+				ast
 	}
 
 	---
@@ -312,7 +303,7 @@ class MoonParser
 				elseif .type == "import"
 					-- Do nothing?
 					true
-				elseif .type == "chain" or .type == "call"
+				elseif .type == "call"
 					-- Not really documentable as-is. Special cases will be handled later… if need be.
 					.ast = ast
 				elseif .type == "if" or .type == "unless" or .type == "with" or .type == "foreach" or .type == "declare_with_shadows" or .type == "do" or .type == "exp"
@@ -392,36 +383,35 @@ class MoonParser
 
 		Class
 
-	isClassGen: (value) =>
-		local name
-
-		if value.type == "chain"
-			ast = value.ast
-
+	isClassGen: (ast) =>
+		if ast[1] == "chain"
 			Class = @\getValue ast[2]
+
 			if Class.type != "reference" or Class.value != "Class"
 				return nil, "does not start with a reference to a class constructor"
 
-			call = @\getValue ast[3]
-			if call.type != "call"
+			call = ast[3]
+			if (not call) or call[1] != "call"
 				return nil, "not a call to a class constructor"
 
-			arg1 = @\getValue call.ast[2][1]
-			arg2 = call.ast[2][2] and @\getValue call.ast[2][2]
+			arg1 = @\getValue call[2][1]
+			arg2 = call[2][2] and @\getValue call[2][2]
 
 			fields = {}
 			argsList, name = if arg1 and arg1.type == "table"
 				arg1.elements
 			elseif arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
-				arg2.elements ,arg1.value
+				arg2.elements, arg1.value
+
 
 			if argsList
 				for _, e in pairs argsList
 					table.insert fields, {e.key, e.value}
 
 				return {
-					comment: value.comment
+					comment: ast.comment
 
+					:name
 					:fields
 				}
 
