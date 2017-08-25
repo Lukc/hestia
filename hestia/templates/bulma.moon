@@ -166,9 +166,8 @@ drawValue = (value, opt = {}) ->
 
 			text "\""
 		when "number"
-			text ""
-			span class: "number", ->
-				text value.value
+			span class: "hestia-number", ->
+				text tostring value.value
 		when "reference"
 			if value.value\sub(1, 1) == "@"
 				span class: "attribute has-text-danger", value.value
@@ -190,6 +189,27 @@ drawValue = (value, opt = {}) ->
 				if value.name
 					text " "
 					span class: "has-text-info", value.name
+
+drawContent = (value) ->
+	switch value.type
+		when "function", "method"
+			drawArgumentsList value
+
+			drawReturnValues value
+		when "table"
+			element "table", class: "table is-fullwidth", ->
+				for element in *value.elements
+					tr ->
+						td class: "hestia-table-key", ->
+							text "["
+							drawValue element.key
+							text "]"
+							text ": "
+						td ->
+							drawValue element.value
+		when "class"
+			-- That part is going to be hard. Probably.
+			true
 
 drawCard = (field, root, section) ->
 	key = field.key
@@ -224,10 +244,7 @@ drawCard = (field, root, section) ->
 				div class: "content", ->
 					raw value.comment
 
-			if value.type == "function" or value.type == "method"
-				drawArgumentsList value
-
-				drawReturnValues value
+			drawContent value
 
 			if value.see and #value.see > 0
 				drawSeeAlso value
@@ -448,6 +465,10 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 			}
 
 			.table .types, .table .name {
+				width: 128px;
+			}
+
+			.hestia-table-key {
 				width: 128px;
 			}
 
