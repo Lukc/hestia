@@ -12,6 +12,15 @@ class DocTree
 	__tostring: =>
 		"<DocTree:#{@type}>"
 
+	getElementByKey: (key) =>
+		if @type == "table"
+			for pair in *@elements
+				{key: k, value: v} = pair
+
+				if type(key) == k.type
+					if k.value == key
+						return v
+
 	---
 	-- @constructor
 	@string: (value, quoteType = nil) ->

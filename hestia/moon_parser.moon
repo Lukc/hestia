@@ -358,9 +358,11 @@ class MoonParser
 
 			-- Valid, documentable identifier.
 			array = if key.type == "key_literal" or key.type == "string"
-				if constructorTag or key.value == "new" or key.value == "__init"
+				if constructorTag
+					Class.constructors
+				elseif key.value == "new" or key.value == "__init"
 					key.value = nil
-				-- FIXME: Needs to be configurable…
+
 					Class.constructors
 				elseif attribute.type == "method"
 					Class.instanceAttributes
@@ -406,10 +408,26 @@ class MoonParser
 			elseif arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
 				arg2.elements, arg1.value
 
-
 			if argsList
 				for _, e in pairs argsList
+					if e.key.type == "string" and e.key.value == "__class"
+						continue
+
 					table.insert fields, {e.key, e.value}
+
+				__class = if argsList == arg1.elements
+					arg1\getElementByKey "__class"
+				else
+					arg2\getElementByKey "__class"
+
+				if __class
+					fields = [f for f in *fields]
+
+					for pair in *__class.elements
+						{:key, :value} = pair
+
+						table.insert fields, {key, value}
+
 
 				return {
 					comment: ast.comment
