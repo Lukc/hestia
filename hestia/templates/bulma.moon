@@ -124,9 +124,10 @@ drawValue = (value, opt = {}) ->
 						else
 							span class: "argument has-text-success", arg.name
 
-						if arg.value
-							text " = "
-							drawValue arg.value
+						unless opt.short
+							if arg.value
+								text " = "
+								drawValue arg.value
 
 					span class: "parens", ") "
 				else
@@ -173,6 +174,17 @@ drawValue = (value, opt = {}) ->
 				span class: "attribute has-text-danger", value.value
 			else
 				text value.value
+		when "table"
+			span class: "has-text-grey", "{"
+
+			if opt.short
+				span class: "has-text-grey", " … "
+			else
+				text " #{#value.elements} elements "
+
+			span class: "has-text-grey", "}"
+		when "class"
+			span class: "class has-text-danger", "class"
 
 drawCard = (field, root, section) ->
 	key = field.key
@@ -242,7 +254,7 @@ getSections = (root) ->
 							p element.key.value
 
 							p class: "content", ->
-								code -> drawValue(element.value, noLinks: true)
+								code -> drawValue(element.value, noLinks: true, short: true)
 			}
 		}
 	elseif root.type == "class"
@@ -256,7 +268,7 @@ getSections = (root) ->
 						p text element.name
 
 						p class: "content", ->
-							code -> drawValue(element.value, noLinks: true)
+							code -> drawValue(element.value, noLinks: true, short: true)
 			}
 			{
 				id: "instanceAttributes"
@@ -267,7 +279,7 @@ getSections = (root) ->
 						p text element.name
 
 						p class: "content", ->
-							code -> drawValue(element.value, noLinks: true)
+							code -> drawValue(element.value, noLinks: true, short: true)
 			}
 			{
 				id: "attributes"
@@ -278,7 +290,7 @@ getSections = (root) ->
 						p text element.name
 
 						p class: "content", ->
-							code -> drawValue(element.value, noLinks: true)
+							code -> drawValue(element.value, noLinks: true, short: true)
 			}
 		}
 	else
