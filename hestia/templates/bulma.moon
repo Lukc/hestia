@@ -4,17 +4,17 @@ drawType = (Type, opt = {}) ->
 		span class: "Type has-text-primary", Type
 	-- Temporary. At some point, “Type” won’t be a string anymore.
 	elseif Type == "nil" or Type == "true" or Type == "false"
-		span class: "Type has-text-warning", Type
+		span class: "type has-text-warning", Type
 	else
 		href = document\typeReference Type
 
 		if href
 			if opt.noLinks
-				span class: "Type has-text-info", :href, Type
+				span class: "type has-text-info", :href, Type
 			else
-				a class: "Type has-text-info", :href, Type
+				a class: "type has-text-info", :href, Type
 		else
-			span class: "Type has-text-grey", Type
+			span class: "type has-text-grey", Type
 
 drawArgumentsList = (value) ->
 	if #value.arguments > 0
