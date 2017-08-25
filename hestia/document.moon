@@ -59,7 +59,7 @@ class Document
 	-- @param file      (file)
 	importMoon: (project, filename, file) =>
 		print "Parsing #{filename}."
-		tree, reason = DocTree file\read "*all"
+		tree, reason = DocTree.fromMoonscript file\read "*all"
 
 		if tree.type == "class"
 			tree.name or= filename\gsub("%.moon", "")\gsub("^.*/", "")\gsub("^.", (s) -> s\upper!)
