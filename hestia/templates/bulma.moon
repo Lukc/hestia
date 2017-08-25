@@ -362,18 +362,21 @@ drawIndex = ->
 									text doc.title
 
 						if category.type == "class"
-							a {
-								class: "card-header-icon button is-medium is-success"
-								href: document\linkTo(doc) .. "#--constructors"
-							}, "Constructors"
-							a {
-								class: "card-header-icon button is-medium is-danger"
-								href: document\linkTo(doc) .. "#--instanceAttributes"
-							}, "Instance"
-							a {
-								class: "card-header-icon button is-medium is-info"
-								href: document\linkTo(doc) .. "#--attributes"
-							}, "Class"
+							if #doc.docTree.constructors > 0
+								a {
+									class: "card-header-icon button is-medium is-success"
+									href: document\linkTo(doc) .. "#--constructors"
+								}, "Constructors"
+							if #doc.docTree.instanceAttributes > 0
+								a {
+									class: "card-header-icon button is-medium is-danger"
+									href: document\linkTo(doc) .. "#--instanceAttributes"
+								}, "Instance"
+							if #doc.docTree.attributes > 0
+								a {
+									class: "card-header-icon button is-medium is-info"
+									href: document\linkTo(doc) .. "#--attributes"
+								}, "Class"
 						elseif not category.type
 							a {
 								class: "card-header-icon button is-medium is-info"
