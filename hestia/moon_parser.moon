@@ -178,7 +178,7 @@ class MoonParser
 
 		return comment\gsub "\n@[a-z][^\n]*", "\n"
 
-	docTrees: {
+	@docTrees: {
 		string: (ast) =>
 			DocTree.string ast[3], ast[2]
 		table: (ast) =>
@@ -366,10 +366,8 @@ class MoonParser
 					key.value = nil
 
 					Class.constructors
-				elseif attribute.type == "method"
-					Class.instanceAttributes
 				else
-					Class.attributes
+					Class.instanceAttributes
 			elseif key.type == "reference" and key.value\sub(1,1) == "@"
 				key.value = key.value\sub 2, key.value\len!
 
