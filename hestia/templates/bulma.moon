@@ -158,6 +158,11 @@ drawValue = (value, opt = {}) ->
 							drawType type, opt
 
 					text " "
+		when "union"
+			for type in *value.value
+				if type != value.value[1]
+					text " | "
+				drawType type, opt
 		when "string"
 			text "\""
 

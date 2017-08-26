@@ -115,6 +115,22 @@ class MoonParser
 			tag, data = tagLine\match "^@([a-z][a-zA-Z0-9]*) *([^\n]*)"
 
 			switch tag
+				when "type"
+					data = trim(data)\match("%(([^)]*)%)") or data
+
+					-- FIXME: Will probably only work for booleans/strings/numbers.
+					docTree.defaultValue =
+						type: docTree.type
+						value: docTree.value
+					docTree.value = nil
+
+					docTree.value = {}
+					docTree.type = "union"
+
+					for type in data\gmatch "[^|]+"
+						type = trim type
+
+						table.insert docTree.value, type
 				when "hidden"
 					docTree.hidden = true
 				when "return"
