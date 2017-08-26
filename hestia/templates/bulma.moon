@@ -379,29 +379,36 @@ drawIndex = ->
 	}
 
 	for category in *categories
-		h3 class: "title is-1", category.name
+		documents = {}
+		for doc in *project.documents
+			if doc == document
+				continue
 
-		div class: "section", id: "index", ->
-			for doc in *project.documents
-				if doc == document
+			if category.type == "guides"
+				if doc.docTree
+					continue
+			elseif category.type
+				if not doc.docTree
 					continue
 
-				if category.type == "guides"
-					if doc.docTree
-						continue
-				elseif category.type
-					if not doc.docTree
-						continue
+				if doc.docTree.type != category.type
+					continue
+			else
+				if not doc.docTree
+					continue
 
-					if doc.docTree.type != category.type
-						continue
-				else
-					if not doc.docTree
-						continue
+				if doc.docTree.type == "class"
+					continue
 
-					if doc.docTree.type == "class"
-						continue
+			table.insert documents, doc
 
+		if #documents == 0
+			continue
+
+		h3 class: "title is-1", category.name
+
+		div class: "section", ->
+			for doc in *documents
 				div class: "card hero is-light", ->
 					div class: "card-header", ->
 						h3 class: "card-header-title", ->
@@ -517,7 +524,7 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 
 
 		if document.generateIndex
-			section class: "section", ->
+			section class: "section", id: "index", ->
 				div class: "container", ->
 					drawIndex!
 		else
