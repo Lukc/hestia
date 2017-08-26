@@ -65,7 +65,7 @@ class
 
 		@\updateFilesList!
 
-		@documents = with __ = {} -- I really with we had implicit variables.
+		@documents = with __ = {} -- I really wish we had implicit variables.
 			for fileName in *@files
 				document, reason = Document.fromFileName self, fileName
 
