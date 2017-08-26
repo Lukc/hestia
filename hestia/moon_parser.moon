@@ -405,50 +405,88 @@ class MoonParser
 		Class
 
 	isClassGen: (ast) =>
-		if ast[1] == "chain"
-			Class = @\getValue ast[2]
+		pkgxxClass = (ast) ->
+			if ast[1] == "chain"
+				Class = @\getValue ast[2]
 
-			if Class.type != "reference" or Class.value != "Class"
-				return nil, "does not start with a reference to a class constructor"
+				if Class.type != "reference" or Class.value != "Class"
+					return nil, "does not start with a reference to a class constructor"
 
-			call = ast[3]
-			if (not call) or call[1] != "call"
-				return nil, "not a call to a class constructor"
+				call = ast[3]
+				if (not call) or call[1] != "call"
+					return nil, "not a call to a class constructor"
 
-			arg1 = @\getValue call[2][1]
-			arg2 = call[2][2] and @\getValue call[2][2]
+				arg1 = @\getValue call[2][1]
+				arg2 = call[2][2] and @\getValue call[2][2]
 
-			fields = {}
-			argsList, name = if arg1 and arg1.type == "table"
-				arg1.elements
-			elseif arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
-				arg2.elements, arg1.value
+				fields = {}
+				argsList, name = if arg1 and arg1.type == "table"
+					arg1.elements
+				elseif arg1 and arg1.type == "string" and arg2 and arg2.type == "table"
+					arg2.elements, arg1.value
 
-			if argsList
-				for _, e in pairs argsList
-					if e.key.type == "string" and e.key.value == "__class"
-						continue
+				if argsList
+					for _, e in pairs argsList
+						if e.key.type == "string" and e.key.value == "__class"
+							continue
 
-					table.insert fields, {e.key, e.value}
+						table.insert fields, {e.key, e.value}
 
-				__class = if argsList == arg1.elements
-					arg1\getElementByKey "__class"
-				else
-					arg2\getElementByKey "__class"
+					__class = if argsList == arg1.elements
+						arg1\getElementByKey "__class"
+					else
+						arg2\getElementByKey "__class"
 
-				if __class
-					fields = [f for f in *fields]
+					if __class
+						fields = [f for f in *fields]
 
-					for pair in *__class.elements
-						{:key, :value} = pair
+						for pair in *__class.elements
+							{:key, :value} = pair
 
-						table.insert fields, {key, value}
+							table.insert fields, {key, value}
 
+
+					return {
+						comment: ast.comment
+
+						:name
+						:fields
+					}
+
+		-- This one makes A LOT of assumptions, starting with the assumption
+		-- that the returned custom objects will classes. If they’re 
+		-- prototypes or other “unique” objects, we’ll be in trouble.
+		metatableClass = (ast) ->
+			if ast[1] == "chain"
+				smt = @\getValue ast[2]
+
+				if smt.type != "reference" or smt.value != "setmetatable"
+					return nil, "does not start with a call to setmetatable"
+
+				call = ast[3]
+				if (not call) or call[1] != "call"
+					return nil, "not a call to setmetatable"
+
+				unless call[2][2]
+					return nil, "not enough parameters to setmetatable"
+
+				mt = @\getValue call[2][2]
+
+				fields = {}
+				for _, e in pairs mt.elements
+					pair = {e.key, e.value}
+
+					if e.key.value == "__call"
+						e.value.tags or= {}
+						e.value.tags.constructor = true
+						e.key.value = nil
+
+					table.insert fields, pair
 
 				return {
 					comment: ast.comment
-
-					:name
 					:fields
 				}
+
+		pkgxxClass(ast) or metatableClass(ast)
 
