@@ -71,6 +71,10 @@ class Document
 		else
 			tree.name or= filename\gsub("%.moon", "")\gsub("^.*/", "")
 
+		if tree and not tree.type
+			tree = nil
+			reason = "last statement in file was not recognized"
+
 		unless tree
 			@body = [[
 <div class="error notification is-danger">
@@ -80,12 +84,9 @@ class Document
 
 			-- Not critical enough to make everything go to hell.
 			print "warning: could not generate doctree from file: ", reason
-			return
+			return nil, reason
 
 		@docTree = tree
-
-		--@body = data.body
-		--@index = data.index
 
 	---
 	-- Manual imports from Markdown file.
