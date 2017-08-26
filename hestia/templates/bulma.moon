@@ -364,24 +364,24 @@ drawTOC = ->
 							section.drawTOCElement element
 
 drawIndex = ->
-	div class: "section", ->
-		categories = {
-			{
-				name: "Modules"
-			}
-			{
-				name: "Classes"
-				type: "class"
-			}
-			{
-				name: "Guides"
-				type: "guides"
-			}
+	categories = {
+		{
+			name: "Modules"
 		}
+		{
+			name: "Classes"
+			type: "class"
+		}
+		{
+			name: "Guides"
+			type: "guides"
+		}
+	}
 
-		for category in *categories
-			h3 class: "title is-3", category.name
+	for category in *categories
+		h3 class: "title is-1", category.name
 
+		div class: "section", id: "index", ->
 			for doc in *project.documents
 				if doc == document
 					continue
@@ -487,6 +487,10 @@ html xmlns: "http://www.w3.org/1999/xhtml", ->
 
 			.card-header-icon.button {
 				margin: 8px;
+			}
+
+			#index .card .card-header .card-header-title .title {
+				font-weight: normal;
 			}
 		]]
 	body ->
