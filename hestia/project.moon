@@ -97,7 +97,7 @@ class
 
 		@files = with files = [filename for filename in *(@files or {})]
 			index = 1
-			while index < #files
+			while index <= #files
 				file = files[index]
 
 				attributes = lfs.attributes file
